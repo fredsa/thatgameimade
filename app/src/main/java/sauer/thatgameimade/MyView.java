@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Xfermode;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -14,18 +15,32 @@ import android.view.View;
 public class MyView extends View {
     private static final int SPRITE_SIZE = 8;
     private static final String TAG = MyView.class.getSimpleName();
-    public static final float SCALE = 1.4f;
+    public static final float SCALE = 1f;
 
     private final Paint paint;
-
-    {
-        paint = new Paint();
-        paint.setColor(Color.RED);
-    }
 
     private float touchX;
     private float touchY;
     private float touchR;
+
+    private Bitmap cakeBitmap;
+    private Bitmap faceBitmap;
+
+
+    private Bitmap foursquareBitmap;
+
+    {
+        paint = new Paint();
+        paint.setColor(Color.RED);
+
+        cakeBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.cake_half_alt);
+
+        faceBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.face);
+        faceBitmap = Bitmap.createScaledBitmap(faceBitmap, faceBitmap.getWidth() * 10, faceBitmap.getHeight() * 10, false);
+
+        foursquareBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.foursquare);
+        foursquareBitmap = Bitmap.createScaledBitmap(foursquareBitmap, foursquareBitmap.getWidth() * 50, foursquareBitmap.getHeight() * 50, true);
+    }
 
     public MyView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -77,7 +92,6 @@ public class MyView extends View {
 
         // paint bitmaps
         paint.setColor(Color.rgb(255, 255, 100));
-        Bitmap cakeBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.cake_half_alt);
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 3; j++) {
                 // actual size = 70
@@ -93,15 +107,33 @@ public class MyView extends View {
                 canvas.drawBitmap(cakeBitmap, matrix, paint);
             }
         }
-        if (touchX >= halfway && touchY >= halfway) {
+
+        // paint test face
+        {
             Matrix matrix = new Matrix();
-            matrix.postTranslate(-cakeBitmap.getWidth() / 2, -cakeBitmap.getHeight() / 2);
-            matrix.postScale(SCALE, SCALE);
-            matrix.postTranslate(touchX, touchY);
-            canvas.drawBitmap(cakeBitmap, matrix, paint);
+            matrix.postScale(5, 5);
+            matrix.postTranslate(halfway, halfway);
+            canvas.drawBitmap(faceBitmap, matrix, paint);
         }
 
-        // paint touch dot
+        // paint test foursquare
+        {
+            Matrix matrix = new Matrix();
+            matrix.postScale(5, 5);
+            matrix.postTranslate(0, halfway);
+            canvas.drawBitmap(foursquareBitmap, matrix, paint);
+        }
+
+        // paint bitmap when touched
+        if (touchX >= SPRITE_SIZE * blockSize || touchY >= SPRITE_SIZE * blockSize ) {
+            Matrix matrix = new Matrix();
+            matrix.postTranslate(-faceBitmap.getWidth() / 2, -faceBitmap.getHeight() / 2);
+            matrix.postScale(5, 5);
+            matrix.postTranslate(touchX, touchY);
+            canvas.drawBitmap(faceBitmap, matrix, paint);
+        }
+
+        // paint dot when touched
         if (touchR > 0) {
             paint.setColor(Color.rgb(200, 255, 0));
             canvas.drawCircle(touchX, touchY, touchR, paint);
