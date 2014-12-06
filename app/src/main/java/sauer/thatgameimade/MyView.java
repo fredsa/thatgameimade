@@ -1,15 +1,20 @@
 package sauer.thatgameimade;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 public class MyView extends View {
-    private static final int SPRITE_SIZE = 4;
+    private static final int SPRITE_SIZE = 8;
     private static final String TAG = MyView.class.getSimpleName();
+    public static final float SCALE = 1.4f;
 
     private final Paint paint;
 
@@ -57,15 +62,47 @@ public class MyView extends View {
         // paint sprite grid
         for (int x = 0; x < SPRITE_SIZE; x++) {
             for (int y = 0; y < SPRITE_SIZE; y++) {
-                paint.setColor(Color.rgb((int) (255 * x / SPRITE_SIZE), (int) (255 * y / SPRITE_SIZE), (int) (255 - 255 * x / SPRITE_SIZE * y / SPRITE_SIZE)));
-                int left = x * blockSize;
-                int top = y * blockSize;
-                canvas.drawRect(left, top, left + blockSize - 3, top + blockSize - 3, paint);
+                int x1 = x * blockSize;
+                int y1 = y * blockSize;
+                int x2 = x1 + blockSize - 3;
+                int y2 = y1 + blockSize - 3;
+                if (touchX >= x1 && touchX <= x2 && touchY >= y1 && touchY <= y2) {
+                    paint.setColor(Color.rgb(220, 255, 220));
+                } else {
+                    paint.setColor(Color.rgb((int) (255 * x / SPRITE_SIZE), (int) (255 * y / SPRITE_SIZE), (int) (255 - 255 * x / SPRITE_SIZE * y / SPRITE_SIZE)));
+                }
+                canvas.drawRect(x1, y1, x2, y2, paint);
             }
         }
 
+        // paint bitmaps
+        paint.setColor(Color.rgb(255, 255, 100));
+        Bitmap cakeBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.cake_half_alt);
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 3; j++) {
+                // actual size = 70
+                // drawable-nodpi = 70
+                // drawable-mdpi = 245
+                // drawable-hdpi = 163
+                // drawable-xhdpi = 123
+                // drawable-xxhdpi = 82
+//                Log.w(TAG, "cake: " + cakeBitmap.getWidth());
+                Matrix matrix = new Matrix();
+                matrix.setScale(SCALE, SCALE);
+                matrix.postTranslate(halfway + i * SCALE * cakeBitmap.getWidth(), j * SCALE * cakeBitmap.getHeight());
+                canvas.drawBitmap(cakeBitmap, matrix, paint);
+            }
+        }
+        if (touchX >= halfway && touchY >= halfway) {
+            Matrix matrix = new Matrix();
+            matrix.postTranslate(-cakeBitmap.getWidth() / 2, -cakeBitmap.getHeight() / 2);
+            matrix.postScale(SCALE, SCALE);
+            matrix.postTranslate(touchX, touchY);
+            canvas.drawBitmap(cakeBitmap, matrix, paint);
+        }
+
         // paint touch dot
-        if (touchX > 0 && touchY > 0) {
+        if (touchR > 0) {
             paint.setColor(Color.rgb(200, 255, 0));
             canvas.drawCircle(touchX, touchY, touchR, paint);
         }
