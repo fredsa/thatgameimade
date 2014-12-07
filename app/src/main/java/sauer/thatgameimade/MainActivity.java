@@ -35,15 +35,4 @@ public class MainActivity extends Activity {
                         View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        float x = event.getX();
-        float y = event.getY();
-        float r = event.getSize();
-//        Log.w(TAG, "onTouchEvent x=" + x + " y=" + y + " r=" + r + " evt:" + event.getHistorySize());
-        myView.placeDot(x, y, r * 1000);
-        return true;
-//        return super.onTouchEvent(event);
-    }
-
 }

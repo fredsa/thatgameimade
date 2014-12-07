@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.Xfermode;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class MyView extends View {
@@ -138,6 +139,17 @@ public class MyView extends View {
             paint.setColor(Color.rgb(200, 255, 0));
             canvas.drawCircle(touchX, touchY, touchR, paint);
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float x = event.getX();
+        float y = event.getY();
+        float r = event.getSize();
+//        Log.w(TAG, "onTouchEvent x=" + x + " y=" + y + " r=" + r + " evt:" + event.getHistorySize());
+        placeDot(x, y, r * 1000);
+        return true;
+//        return super.onTouchEvent(event);
     }
 
     public void placeDot(float x, float y, float r) {
