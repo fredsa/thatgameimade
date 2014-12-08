@@ -5,9 +5,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Shader;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,7 +20,7 @@ import android.view.View;
  */
 public class PixelGridView extends View {
 
-    private final Bitmap spriteBitmap;
+    private Bitmap spriteBitmap;
 
     private final Paint bgPaint;
     private final Paint spritePaint;
@@ -32,7 +34,7 @@ public class PixelGridView extends View {
         bgPaint = new Paint();
         bgPaint.setShader(bgShader);
 
-        spriteBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.face);
+        spriteBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.face).copy(Bitmap.Config.ARGB_8888, true);
         spritePaint = new Paint();
     }
 
@@ -61,4 +63,23 @@ public class PixelGridView extends View {
         canvas.drawBitmap(spriteBitmap, matrix, spritePaint);
     }
 
+    @Override
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
+        if (event.getPointerCount() > 1) {
+            spriteBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.face).copy(Bitmap.Config.ARGB_8888, true);
+            return true;
+        }
+
+        int x = (int) (event.getX() / scale);
+        int y = (int) (event.getY() / scale);
+        if (x < 0 || y < 0 || x >= spriteBitmap.getWidth() || y >= spriteBitmap.getHeight()) {
+            return false;
+        }
+
+
+        int rgb = (int) (Math.random() * 255);
+        spriteBitmap.setPixel(x, y, Color.rgb(rgb, rgb, rgb));
+        invalidate();
+        return true;
+    }
 }
