@@ -34,7 +34,6 @@ public class PixelGridView extends View {
         bgPaint = new Paint();
         bgPaint.setShader(bgShader);
 
-        spriteBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.face).copy(Bitmap.Config.ARGB_8888, true);
         spritePaint = new Paint();
     }
 
@@ -56,6 +55,9 @@ public class PixelGridView extends View {
         super.onDraw(canvas);
         canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), bgPaint);
 
+        if (spriteBitmap == null) {
+            return;
+        }
         scale = Math.min(canvas.getWidth() / spriteBitmap.getWidth(),
                 canvas.getHeight() / spriteBitmap.getHeight());
         Matrix matrix = new Matrix();
@@ -65,10 +67,10 @@ public class PixelGridView extends View {
 
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
-        if (event.getPointerCount() > 1) {
-            spriteBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.face).copy(Bitmap.Config.ARGB_8888, true);
-            return true;
-        }
+//        if (event.getPointerCount() > 1) {
+//            spriteBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.face).copy(Bitmap.Config.ARGB_8888, true);
+//            return true;
+//        }
 
         int x = (int) (event.getX() / scale);
         int y = (int) (event.getY() / scale);
@@ -76,10 +78,15 @@ public class PixelGridView extends View {
             return false;
         }
 
-
         int rgb = (int) (Math.random() * 255);
         spriteBitmap.setPixel(x, y, Color.rgb(rgb, rgb, rgb));
         invalidate();
         return true;
     }
+
+    public void setSpriteBitmap(Bitmap spriteBitmap) {
+        this.spriteBitmap = spriteBitmap;
+    }
+
+
 }
