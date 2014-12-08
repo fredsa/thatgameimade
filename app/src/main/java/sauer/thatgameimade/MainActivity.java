@@ -3,7 +3,6 @@ package sauer.thatgameimade;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.Date;
