@@ -19,6 +19,7 @@ import android.view.View;
  */
 public class PixelGridView extends View {
 
+    private static final String TAG = PixelGridView.class.getSimpleName();
     private AdvancedBitmap spriteBitmap;
 
     private final Paint bgPaint;
@@ -82,6 +83,7 @@ public class PixelGridView extends View {
 
         int color = bitmap.getPixel(x, y);
         color = color ^ 0xffffff;
+        color = color | 0xff000000;
         bitmap.setPixel(x, y, color);
         mainActivity.invalidateViews();
         return true;
