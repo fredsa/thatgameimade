@@ -15,7 +15,7 @@ public class MainActivity extends Activity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private MyView myView;
     private PixelGridView pixelGridView;
-    private Bitmap spriteBitmap;
+    private AdvancedBitmap spriteBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,11 +24,14 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         myView = (MyView) findViewById(R.id.myView);
 
-        spriteBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.face).copy(Bitmap.Config.ARGB_8888, true);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.face).copy(Bitmap.Config.ARGB_8888, true);
+        spriteBitmap = new AdvancedBitmap(bitmap);
         pixelGridView = (PixelGridView) findViewById(R.id.pixelGridView);
 
-        myView.setSpriteBitmap(spriteBitmap);
-        pixelGridView.setSpriteBitmap(spriteBitmap);
+//        myView.setMainActivity(this);
+        pixelGridView.setMainActivity(this);
+        myView.setAdvancedBitmap(spriteBitmap);
+        pixelGridView.setAdvancedBitmap(spriteBitmap);
     }
 
     @Override
@@ -42,4 +45,8 @@ public class MainActivity extends Activity {
         decorView.setSystemUiVisibility(VISIBILITY_FLAGS);
     }
 
+    public void invalidateViews() {
+        pixelGridView.invalidate();
+        myView.invalidate();
+    }
 }

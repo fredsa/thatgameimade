@@ -23,7 +23,7 @@ public class MyView extends View {
     private float touchR;
 
     private Bitmap cakeBitmap;
-    private Bitmap spriteBitmap;
+    private AdvancedBitmap spriteBitmap;
 
 
     private Bitmap foursquareBitmap;
@@ -51,6 +51,8 @@ public class MyView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        Bitmap bitmap = this.spriteBitmap.getCurrentBitmap();
 
         int height = canvas.getHeight();
         int width = canvas.getWidth();
@@ -91,17 +93,14 @@ public class MyView extends View {
         paint.setColor(Color.rgb(255, 255, 100));
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 3; j++) {
-                // actual size = 70
-                // drawable-nodpi = 70
-                // drawable-mdpi = 245
-                // drawable-hdpi = 163
-                // drawable-xhdpi = 123
-                // drawable-xxhdpi = 82
-//                Log.w(TAG, "cake: " + cakeBitmap.getWidth());
                 Matrix matrix = new Matrix();
-                matrix.setScale(SCALE, SCALE);
+                matrix.postScale(SCALE, SCALE);
                 matrix.postTranslate(halfway + i * SCALE * cakeBitmap.getWidth(), j * SCALE * cakeBitmap.getHeight());
                 canvas.drawBitmap(cakeBitmap, matrix, paint);
+
+                matrix.preScale(20, 20);
+                matrix.postTranslate(0, 3 * SCALE * cakeBitmap.getHeight());
+                canvas.drawBitmap(bitmap, matrix, paint);
             }
         }
 
@@ -110,7 +109,7 @@ public class MyView extends View {
             Matrix matrix = new Matrix();
             matrix.postScale(5, 5);
             matrix.postTranslate(halfway, halfway);
-            canvas.drawBitmap(spriteBitmap, matrix, paint);
+            canvas.drawBitmap(bitmap, matrix, paint);
         }
 
         // paint test foursquare
@@ -122,12 +121,12 @@ public class MyView extends View {
         }
 
         // paint sprite when touched
-        if (touchX >= SPRITE_SIZE * blockSize || touchY >= SPRITE_SIZE * blockSize ) {
+        if (touchX >= SPRITE_SIZE * blockSize || touchY >= SPRITE_SIZE * blockSize) {
             Matrix matrix = new Matrix();
-            matrix.postTranslate(-spriteBitmap.getWidth() / 2, -spriteBitmap.getHeight() / 2);
+            matrix.postTranslate(-bitmap.getWidth() / 2, -bitmap.getHeight() / 2);
             matrix.postScale(50, 50);
             matrix.postTranslate(touchX, touchY);
-            canvas.drawBitmap(spriteBitmap, matrix, paint);
+            canvas.drawBitmap(bitmap, matrix, paint);
         }
 
         // paint dot when touched
@@ -155,9 +154,8 @@ public class MyView extends View {
         invalidate();
     }
 
-    public void setSpriteBitmap(Bitmap spriteBitmap) {
+    public void setAdvancedBitmap(AdvancedBitmap spriteBitmap) {
         this.spriteBitmap = spriteBitmap;
     }
-
 
 }
