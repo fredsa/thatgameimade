@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,7 +21,7 @@ public class MyView extends View {
 
     private float touchX;
     private float touchY;
-    private float touchR;
+    private float touchMajor;
 
     private Bitmap cakeBitmap;
     private AdvancedBitmap spriteBitmap;
@@ -39,6 +40,14 @@ public class MyView extends View {
         foursquareBitmap = Bitmap.createScaledBitmap(foursquareBitmap, foursquareBitmap.getWidth() * 50, foursquareBitmap.getHeight() * 50, true);
     }
 
+    private int canvasWidth;
+    private int canvasHeight;
+    private int halfway;
+    private int blockSize;
+    private Matrix drawMatrix = new Matrix();
+
+
+
     public MyView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -49,6 +58,14 @@ public class MyView extends View {
 
 
     @Override
+    protected void onSizeChanged(int weight, int height, int oldWidth, int oldHeight) {
+        canvasWidth = weight;
+        canvasHeight = height;
+        halfway = Math.min(canvasWidth, canvasHeight) / 2;
+        blockSize = halfway / SPRITE_SIZE;
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (spriteBitmap == null) {
@@ -57,15 +74,9 @@ public class MyView extends View {
 
         Bitmap bitmap = spriteBitmap.getCurrentBitmap();
 
-        int height = canvas.getClipBounds().height();
-        int width = canvas.getClipBounds().width();
-        int shortSideLength = Math.min(width, height);
-        int halfway = shortSideLength / 2;
-        int blockSize = halfway / SPRITE_SIZE;
-
         // paint background
         paint.setColor(Color.rgb(220, 220, 255));
-        canvas.drawRect(0, 0, width, height, paint);
+        canvas.drawRect(0, 0, canvasWidth, canvasHeight, paint);
 
         // paint pretty pattern
         paint.setColor(Color.rgb(255, 0, 0));
@@ -86,7 +97,7 @@ public class MyView extends View {
                 if (touchX >= x1 && touchX <= x2 && touchY >= y1 && touchY <= y2) {
                     paint.setColor(Color.rgb(220, 255, 220));
                 } else {
-                    paint.setColor(Color.rgb((int) (255 * x / SPRITE_SIZE), (int) (255 * y / SPRITE_SIZE), (int) (255 - 255 * x / SPRITE_SIZE * y / SPRITE_SIZE)));
+                    paint.setColor(Color.rgb(255 * x / SPRITE_SIZE, 255 * y / SPRITE_SIZE, 255 - 255 * x / SPRITE_SIZE * y / SPRITE_SIZE));
                 }
                 canvas.drawRect(x1, y1, x2, y2, paint);
             }
@@ -96,64 +107,62 @@ public class MyView extends View {
         paint.setColor(Color.rgb(255, 255, 100));
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 3; j++) {
-                Matrix matrix = new Matrix();
-                matrix.postScale(SCALE, SCALE);
-                matrix.postTranslate(halfway + i * SCALE * cakeBitmap.getWidth(), j * SCALE * cakeBitmap.getHeight());
-                canvas.drawBitmap(cakeBitmap, matrix, paint);
+                drawMatrix.reset();
+                drawMatrix.postScale(SCALE, SCALE);
+                drawMatrix.postTranslate(halfway + i * SCALE * cakeBitmap.getWidth(), j * SCALE * cakeBitmap.getHeight());
+                canvas.drawBitmap(cakeBitmap, drawMatrix, paint);
 
-                matrix.preScale(20, 20);
-                matrix.postTranslate(0, 3 * SCALE * cakeBitmap.getHeight());
-                canvas.drawBitmap(bitmap, matrix, paint);
+                drawMatrix.preScale(20, 20);
+                drawMatrix.postTranslate(0, 3 * SCALE * cakeBitmap.getHeight());
+                canvas.drawBitmap(bitmap, drawMatrix, paint);
             }
         }
 
         // paint test face
         {
-            Matrix matrix = new Matrix();
-            matrix.postScale(5, 5);
-            matrix.postTranslate(halfway, halfway);
-            canvas.drawBitmap(bitmap, matrix, paint);
+            drawMatrix.reset();
+            drawMatrix.postScale(5, 5);
+            drawMatrix.postTranslate(halfway, halfway);
+            canvas.drawBitmap(bitmap, drawMatrix, paint);
         }
 
         // paint test foursquare
         {
-            Matrix matrix = new Matrix();
-            matrix.postScale(5, 5);
-            matrix.postTranslate(0, halfway);
-            canvas.drawBitmap(foursquareBitmap, matrix, paint);
+            drawMatrix.reset();
+            drawMatrix.postScale(5, 5);
+            drawMatrix.postTranslate(0, halfway);
+            canvas.drawBitmap(foursquareBitmap, drawMatrix, paint);
         }
 
         // paint sprite when touched
         if (touchX >= SPRITE_SIZE * blockSize || touchY >= SPRITE_SIZE * blockSize) {
-            Matrix matrix = new Matrix();
-            matrix.postTranslate(-bitmap.getWidth() / 2, -bitmap.getHeight() / 2);
-            matrix.postScale(50, 50);
-            matrix.postTranslate(touchX, touchY);
-            canvas.drawBitmap(bitmap, matrix, paint);
+            drawMatrix.reset();
+            drawMatrix.postTranslate(-bitmap.getWidth() / 2, -bitmap.getHeight() / 2);
+            drawMatrix.postScale(50, 50);
+            drawMatrix.postTranslate(touchX, touchY);
+            canvas.drawBitmap(bitmap, drawMatrix, paint);
         }
 
         // paint dot when touched
-        if (touchR > 0) {
+        if (touchMajor > 0) {
             paint.setColor(Color.rgb(200, 255, 0));
-            canvas.drawCircle(touchX, touchY, touchR, paint);
+            canvas.drawCircle(touchX, touchY, touchMajor/2, paint);
         }
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
         float x = event.getX();
         float y = event.getY();
-        float r = event.getSize();
-//        Log.w(TAG, "onTouchEvent x=" + x + " y=" + y + " r=" + r + " evt:" + event.getHistorySize());
-        placeDot(x, y, r * 1000);
+        float touchMajor = event.getTouchMajor();
+        placeDot(x, y, touchMajor);
         return true;
-//        return super.onTouchEvent(event);
     }
 
-    public void placeDot(float x, float y, float r) {
+    public void placeDot(float x, float y, float touchMajor) {
         this.touchX = x;
         this.touchY = y;
-        this.touchR = r;
+        this.touchMajor = touchMajor;
         invalidate();
     }
 
