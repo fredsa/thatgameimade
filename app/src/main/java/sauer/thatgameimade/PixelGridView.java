@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Shader;
@@ -54,18 +55,43 @@ public class PixelGridView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        Bitmap bitmap = spriteBitmap.getCurrentBitmap();
         super.onDraw(canvas);
-        canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), bgPaint);
 
+        // draw background
+        canvas.drawRect(canvas.getClipBounds(), bgPaint);
+
+        // fallback image (for use in editor)
         if (spriteBitmap == null) {
+            drawRainboxGrid(canvas);
             return;
         }
-        scale = Math.min(canvas.getWidth() / bitmap.getWidth(),
-                canvas.getHeight() / bitmap.getHeight());
+
+        Bitmap bitmap = spriteBitmap.getCurrentBitmap();
+        scale = Math.min(canvas.getClipBounds().width() / bitmap.getWidth(),
+                canvas.getClipBounds().height() / bitmap.getHeight());
         Matrix matrix = new Matrix();
         matrix.postScale(scale, scale);
         canvas.drawBitmap(bitmap, matrix, spritePaint);
+    }
+
+    private void drawRainboxGrid(Canvas canvas) {
+        int SPRITE_SIZE = 4;
+        Paint paint = new Paint();
+        int height = canvas.getClipBounds().height();
+        int width = canvas.getClipBounds().width();
+        int shortSideLength = Math.min(width, height);
+        int blockSize = shortSideLength/ SPRITE_SIZE;
+        // paint sprite grid
+        for (int x = 0; x < SPRITE_SIZE; x++) {
+            for (int y = 0; y < SPRITE_SIZE; y++) {
+                int x1 = x * blockSize;
+                int y1 = y * blockSize;
+                int x2 = x1 + blockSize - 3;
+                int y2 = y1 + blockSize - 3;
+                paint.setColor(Color.rgb((int) (255 * x / SPRITE_SIZE), (int) (255 * y / SPRITE_SIZE), (int) (255 - 255 * x / SPRITE_SIZE * y / SPRITE_SIZE)));
+                canvas.drawRect(x1, y1, x2, y2, paint);
+            }
+        }
     }
 
     @Override

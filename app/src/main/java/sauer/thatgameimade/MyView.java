@@ -51,11 +51,14 @@ public class MyView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        if (spriteBitmap == null) {
+            return;
+        }
 
-        Bitmap bitmap = this.spriteBitmap.getCurrentBitmap();
+        Bitmap bitmap = spriteBitmap.getCurrentBitmap();
 
-        int height = canvas.getHeight();
-        int width = canvas.getWidth();
+        int height = canvas.getClipBounds().height();
+        int width = canvas.getClipBounds().width();
         int shortSideLength = Math.min(width, height);
         int halfway = shortSideLength / 2;
         int blockSize = halfway / SPRITE_SIZE;
