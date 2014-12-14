@@ -25,8 +25,6 @@ public class MyView extends View {
 
     private Bitmap cakeBitmap;
     private AdvancedBitmap spriteBitmap;
-
-
     private Bitmap foursquareBitmap;
 
     {
@@ -34,7 +32,6 @@ public class MyView extends View {
         paint.setColor(Color.RED);
 
         cakeBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.cake_half_alt);
-
 
         foursquareBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.foursquare);
         foursquareBitmap = Bitmap.createScaledBitmap(foursquareBitmap, foursquareBitmap.getWidth() * 50, foursquareBitmap.getHeight() * 50, true);
@@ -45,7 +42,6 @@ public class MyView extends View {
     private int halfway;
     private int blockSize;
     private Matrix drawMatrix = new Matrix();
-
 
 
     public MyView(Context context, AttributeSet attrs) {
@@ -68,11 +64,6 @@ public class MyView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (spriteBitmap == null) {
-            return;
-        }
-
-        Bitmap bitmap = spriteBitmap.getCurrentBitmap();
 
         // paint background
         paint.setColor(Color.rgb(220, 220, 255));
@@ -103,8 +94,24 @@ public class MyView extends View {
             }
         }
 
+        // paint test foursquare
+        {
+            drawMatrix.reset();
+            float ratio = halfway / foursquareBitmap.getWidth();
+            drawMatrix.postScale(ratio, ratio);
+            drawMatrix.postTranslate(0, halfway);
+            canvas.drawBitmap(foursquareBitmap, drawMatrix, paint);
+        }
+
+        if (spriteBitmap == null) {
+            return;
+        }
+
+        Bitmap bitmap = spriteBitmap.getCurrentBitmap();
+
         // paint bitmaps
         paint.setColor(Color.rgb(255, 255, 100));
+        float ratio = SCALE * cakeBitmap.getWidth() / bitmap.getWidth();
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 3; j++) {
                 drawMatrix.reset();
@@ -112,26 +119,11 @@ public class MyView extends View {
                 drawMatrix.postTranslate(halfway + i * SCALE * cakeBitmap.getWidth(), j * SCALE * cakeBitmap.getHeight());
                 canvas.drawBitmap(cakeBitmap, drawMatrix, paint);
 
-                drawMatrix.preScale(20, 20);
-                drawMatrix.postTranslate(0, 3 * SCALE * cakeBitmap.getHeight());
+                drawMatrix.reset();
+                drawMatrix.postScale(ratio, ratio);
+                drawMatrix.postTranslate(halfway + i * ratio * bitmap.getWidth(), halfway + j * ratio * bitmap.getHeight());
                 canvas.drawBitmap(bitmap, drawMatrix, paint);
             }
-        }
-
-        // paint test face
-        {
-            drawMatrix.reset();
-            drawMatrix.postScale(5, 5);
-            drawMatrix.postTranslate(halfway, halfway);
-            canvas.drawBitmap(bitmap, drawMatrix, paint);
-        }
-
-        // paint test foursquare
-        {
-            drawMatrix.reset();
-            drawMatrix.postScale(5, 5);
-            drawMatrix.postTranslate(0, halfway);
-            canvas.drawBitmap(foursquareBitmap, drawMatrix, paint);
         }
 
         // paint sprite when touched
@@ -146,7 +138,7 @@ public class MyView extends View {
         // paint dot when touched
         if (touchMajor > 0) {
             paint.setColor(Color.rgb(200, 255, 0));
-            canvas.drawCircle(touchX, touchY, touchMajor/2, paint);
+            canvas.drawCircle(touchX, touchY, touchMajor / 2, paint);
         }
     }
 

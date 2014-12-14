@@ -59,6 +59,9 @@ public class PixelGridView extends View {
     protected void onSizeChanged(int weight, int height, int oldWidth, int oldHeight) {
         canvasWidth = weight;
         canvasHeight = height;
+        if (spriteBitmap == null) {
+            return;
+        }
         scale = Math.min(canvasWidth / spriteBitmap.getCurrentBitmap().getWidth(),
                 canvasHeight / spriteBitmap.getCurrentBitmap().getHeight());
         drawMatrix.reset();
