@@ -11,6 +11,7 @@ import android.graphics.Paint;
 import android.graphics.Shader;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -77,6 +78,11 @@ public class PixelGridView extends View {
 
         if (isInEditMode()) {
             drawRainbowGrid(canvas);
+            return;
+        }
+
+        if (spriteBitmap == null) {
+            Log.w(TAG, "bitmap not set");
             return;
         }
 
