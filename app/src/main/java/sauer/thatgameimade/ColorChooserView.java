@@ -5,20 +5,19 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.SweepGradient;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.view.SurfaceView;
 import android.view.View;
 
-import static android.graphics.Color.RED;
-
-public class ColorChooserView extends SurfaceView {
+public class ColorChooserView extends View {
 
     private int canvasWidth;
     private int canvasHeight;
     private int shortSide;
     private Paint colorPaint;
     private Paint bgPaint;
+    private String TAG = ColorChooserView.class.getSimpleName();
 
     public ColorChooserView(Context context) {
         super(context);
@@ -42,6 +41,9 @@ public class ColorChooserView extends SurfaceView {
         canvasWidth = width;
         canvasHeight = height;
         shortSide = Math.min(width, height);
+
+        int[] colors = new int[]{Color.RED, Color.MAGENTA,Color.BLUE, Color.CYAN, Color.GREEN, Color.YELLOW, Color.RED};
+        colorPaint.setShader(new SweepGradient(shortSide / 2, shortSide / 2, colors, null));
     }
 
     {
@@ -49,7 +51,7 @@ public class ColorChooserView extends SurfaceView {
         bgPaint.setColor(Color.BLACK);
 
         colorPaint = new Paint();
-        colorPaint.setColor(RED);
+//        colorPaint.setColor(RED);
     }
 
     @Override
@@ -57,7 +59,8 @@ public class ColorChooserView extends SurfaceView {
         super.onDraw(canvas);
 
         canvas.drawRect(0, 0, canvasWidth, canvasHeight, bgPaint);
+
         canvas.drawCircle(shortSide / 2, shortSide / 2, shortSide / 2 * .8f, colorPaint);
-        canvas.drawCircle(shortSide / 2, shortSide / 2, shortSide / 2 * .7f, bgPaint);
+        canvas.drawCircle(shortSide / 2, shortSide / 2, shortSide / 2 * .6f, bgPaint);
     }
 }
