@@ -2,5 +2,8 @@
 <resources>
 
     <string name="app_name">That game…</string>
+    <string name="title_activity_color_chooser_view">ColorChooserView</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

@@ -75,8 +75,7 @@ public class PixelGridView extends View {
         // draw background
         canvas.drawRect(0, 0, canvasWidth, canvasHeight, bgPaint);
 
-        // fallback image (for use in editor)
-        if (spriteBitmap == null) {
+        if (isInEditMode()) {
             drawRainbowGrid(canvas);
             return;
         }

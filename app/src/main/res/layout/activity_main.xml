@@ -1,36 +1,35 @@
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:orientation="horizontal">
 
-    android:keepScreenOn="true"
-
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:showDividers="beginning|none|middle|end"
-
-    android:useDefaultMargins="true"
-    tools:context=".MainActivity">
-
-    <TableRow
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="horizontal">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <sauer.thatgameimade.PixelGridView
             android:id="@+id/pixelGridView"
-            android:background="#ccc"
-            android:layout_weight="1" />
+            android:layout_width="150dp"
+            android:layout_height="150dp" />
+
+        <sauer.thatgameimade.ColorChooserView
+            android:id="@+id/colorChooserView"
+            android:layout_width="150dp"
+            android:layout_height="150dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <sauer.thatgameimade.MyView
             android:id="@+id/myView"
-            class="sauer.thatgameimade.MyView"
-            android:layout_weight="2" />
-    </TableRow>
+            android:layout_width="300dp"
+            android:layout_height="300dp" />
 
-</TableLayout>
+    </LinearLayout>
 
+</LinearLayout>

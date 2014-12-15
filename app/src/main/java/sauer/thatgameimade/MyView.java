@@ -66,7 +66,7 @@ public class MyView extends View {
         super.onDraw(canvas);
 
         // paint background
-        paint.setColor(Color.rgb(220, 220, 255));
+        paint.setColor(Color.rgb(255, (int) (Math.random()*255), (int) (Math.random()*255)));
         canvas.drawRect(0, 0, canvasWidth, canvasHeight, paint);
 
         // paint pretty pattern
@@ -103,7 +103,7 @@ public class MyView extends View {
             canvas.drawBitmap(foursquareBitmap, drawMatrix, paint);
         }
 
-        if (spriteBitmap == null) {
+        if (isInEditMode()) {
             return;
         }
 
