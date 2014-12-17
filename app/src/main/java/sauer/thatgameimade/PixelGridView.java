@@ -58,8 +58,8 @@ public class PixelGridView extends View {
     }
 
     @Override
-    protected void onSizeChanged(int weight, int height, int oldWidth, int oldHeight) {
-        canvasWidth = weight;
+    protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+        canvasWidth = width;
         canvasHeight = height;
         if (spriteBitmap == null) {
             return;
