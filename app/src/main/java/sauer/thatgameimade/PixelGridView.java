@@ -42,6 +42,7 @@ public class PixelGridView extends View {
     private int canvasWidth;
     private int canvasHeight;
     private Matrix drawMatrix = new Matrix();
+    private int drawingColor;
 
 
     public PixelGridView(Context context) {
@@ -123,10 +124,7 @@ public class PixelGridView extends View {
             return false;
         }
 
-        int color = bitmap.getPixel(x, y);
-        color = color ^ 0xffffff;
-        color = color | 0xff000000;
-        bitmap.setPixel(x, y, color);
+        bitmap.setPixel(x, y, drawingColor);
         mainActivity.invalidateViews();
         return true;
     }
@@ -137,5 +135,9 @@ public class PixelGridView extends View {
 
     public void setMainActivity(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
+    }
+
+    public void setDrawingColor(int drawingColor) {
+        this.drawingColor = drawingColor;
     }
 }

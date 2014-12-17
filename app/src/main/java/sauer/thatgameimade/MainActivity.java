@@ -17,6 +17,7 @@ public class MainActivity extends Activity {
     private PixelGridView pixelGridView;
     private AdvancedBitmap spriteBitmap;
     private ColorChooserView colorChooserView;
+    private int drawingColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class MainActivity extends Activity {
         pixelGridView.setAdvancedBitmap(spriteBitmap);
 
         colorChooserView = (ColorChooserView) findViewById(R.id.colorChooserView);
+        colorChooserView.setMainActivity(this);
     }
 
     @Override
@@ -52,5 +54,10 @@ public class MainActivity extends Activity {
         pixelGridView.invalidate();
         myView.invalidate();
         colorChooserView.invalidate();
+    }
+
+    public void setDrawingColor(int drawingColor) {
+        this.drawingColor = drawingColor;
+        pixelGridView.setDrawingColor(drawingColor);
     }
 }
