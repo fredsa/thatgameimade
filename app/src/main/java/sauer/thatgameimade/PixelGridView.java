@@ -26,7 +26,7 @@ public class PixelGridView extends View {
 
     private final Paint bgPaint;
     private final Paint spritePaint;
-    private int scale;
+    private float scale;
 
     {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.checker_gray);
@@ -43,6 +43,7 @@ public class PixelGridView extends View {
     private int canvasHeight;
     private Matrix drawMatrix = new Matrix();
     private int drawingColor;
+    private int shortSide;
 
 
     public PixelGridView(Context context) {
@@ -64,8 +65,9 @@ public class PixelGridView extends View {
         if (spriteBitmap == null) {
             return;
         }
-        scale = Math.min(canvasWidth / spriteBitmap.getCurrentBitmap().getWidth(),
-                canvasHeight / spriteBitmap.getCurrentBitmap().getHeight());
+        shortSide = Math.min(canvasWidth, canvasHeight);
+        scale = Math.min((float) canvasWidth / spriteBitmap.getCurrentBitmap().getWidth(),
+                (float) canvasHeight / spriteBitmap.getCurrentBitmap().getHeight());
         drawMatrix.reset();
         drawMatrix.postScale(scale, scale);
     }
@@ -75,10 +77,9 @@ public class PixelGridView extends View {
         super.onDraw(canvas);
 
         // draw background
-        canvas.drawRect(0, 0, canvasWidth, canvasHeight, bgPaint);
+        canvas.drawRect(0, 0, shortSide, shortSide, bgPaint);
 
         if (isInEditMode()) {
-            drawRainbowGrid(canvas);
             return;
         }
 
@@ -89,26 +90,6 @@ public class PixelGridView extends View {
 
         Bitmap bitmap = spriteBitmap.getCurrentBitmap();
         canvas.drawBitmap(bitmap, drawMatrix, spritePaint);
-    }
-
-    private void drawRainbowGrid(Canvas canvas) {
-        int SPRITE_SIZE = 4;
-        Paint paint = new Paint();
-        int height = canvas.getClipBounds().height();
-        int width = canvas.getClipBounds().width();
-        int shortSideLength = Math.min(width, height);
-        int blockSize = shortSideLength / SPRITE_SIZE;
-        // paint sprite grid
-        for (int x = 0; x < SPRITE_SIZE; x++) {
-            for (int y = 0; y < SPRITE_SIZE; y++) {
-                int x1 = x * blockSize;
-                int y1 = y * blockSize;
-                int x2 = x1 + blockSize - 3;
-                int y2 = y1 + blockSize - 3;
-                paint.setColor(Color.rgb(255 * x / SPRITE_SIZE, 255 * y / SPRITE_SIZE, 255 - 255 * x / SPRITE_SIZE * y / SPRITE_SIZE));
-                canvas.drawRect(x1, y1, x2, y2, paint);
-            }
-        }
     }
 
     @Override

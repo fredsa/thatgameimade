@@ -39,8 +39,8 @@ public class MyView extends View {
 
     private int canvasWidth;
     private int canvasHeight;
-    private int halfway;
-    private int blockSize;
+    private float halfway;
+    private float blockSize;
     private Matrix drawMatrix = new Matrix();
 
 
@@ -81,10 +81,10 @@ public class MyView extends View {
         // paint sprite grid
         for (int x = 0; x < SPRITE_SIZE; x++) {
             for (int y = 0; y < SPRITE_SIZE; y++) {
-                int x1 = x * blockSize;
-                int y1 = y * blockSize;
-                int x2 = x1 + blockSize - 3;
-                int y2 = y1 + blockSize - 3;
+                float x1 = x * blockSize;
+                float y1 = y * blockSize;
+                float x2 = x1 + blockSize - 3;
+                float y2 = y1 + blockSize - 3;
                 if (touchX >= x1 && touchX <= x2 && touchY >= y1 && touchY <= y2) {
                     paint.setColor(Color.rgb(220, 255, 220));
                 } else {
