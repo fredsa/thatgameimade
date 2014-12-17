@@ -66,7 +66,7 @@ public class MyView extends View {
         super.onDraw(canvas);
 
         // paint background
-        paint.setColor(Color.rgb(255, (int) (Math.random()*255), (int) (Math.random()*255)));
+        paint.setColor(Color.rgb(200, 250, 200));
         canvas.drawRect(0, 0, canvasWidth, canvasHeight, paint);
 
         // paint pretty pattern
