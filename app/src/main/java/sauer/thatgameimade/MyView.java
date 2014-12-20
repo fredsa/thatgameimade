@@ -17,7 +17,9 @@ public class MyView extends View {
     private static final String TAG = MyView.class.getSimpleName();
     public static final float SCALE = 1f;
 
-    private final Paint paint;
+    private final Paint bgPaint;
+    private final Paint touchPaint;
+    private final Paint bitmapPaint;
 
     private float touchX;
     private float touchY;
@@ -28,8 +30,13 @@ public class MyView extends View {
     private Bitmap foursquareBitmap;
 
     {
-        paint = new Paint();
-        paint.setColor(Color.RED);
+        bgPaint = new Paint();
+        bgPaint.setColor(Color.rgb(200, 255, 200));
+
+        bitmapPaint = new Paint();
+
+        touchPaint = new Paint();
+        touchPaint.setColor(Color.argb(200, 200, 200, 200));
 
         cakeBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.cake_half_alt);
 
@@ -67,24 +74,20 @@ public class MyView extends View {
 
         paintBackground(canvas);
 
-        // test patterns
-//        paintTestPattern(canvas);
-//        paintTestSpriteGrid(canvas);
-//        paintTestFoursquare(canvas);
-
         if (isInEditMode()) {
             return;
         }
 
-        Bitmap bitmap = spriteBitmap.getCurrentBitmap();
-        paintBitmaps(canvas, bitmap);
-        paintSpriteWhenTouched(canvas, bitmap);
+//        paintTestFoursquare(canvas);
+
+        Bitmap currentBitmap = spriteBitmap.getCurrentBitmap();
+        paintBitmaps(canvas, currentBitmap);
+        paintSpriteWhenTouched(canvas, currentBitmap);
         paintDotWhenTouched(canvas);
     }
 
     private void paintBackground(Canvas canvas) {
-        paint.setColor(Color.rgb(200, 250, 200));
-        canvas.drawRect(0, 0, canvasWidth, canvasHeight, paint);
+        canvas.drawRect(0, 0, canvasWidth, canvasHeight, bgPaint);
     }
 
     private void paintSpriteWhenTouched(Canvas canvas, Bitmap bitmap) {
@@ -93,31 +96,30 @@ public class MyView extends View {
             drawMatrix.postTranslate(-bitmap.getWidth() / 2, -bitmap.getHeight() / 2);
             drawMatrix.postScale(50, 50);
             drawMatrix.postTranslate(touchX, touchY);
-            canvas.drawBitmap(bitmap, drawMatrix, paint);
+            canvas.drawBitmap(bitmap, drawMatrix, bitmapPaint);
         }
     }
 
     private void paintDotWhenTouched(Canvas canvas) {
         if (touchMajor > 0) {
-            paint.setColor(Color.rgb(200, 255, 0));
-            canvas.drawCircle(touchX, touchY, touchMajor / 2, paint);
+            canvas.drawCircle(touchX, touchY, touchMajor / 2, touchPaint);
         }
     }
 
     private void paintBitmaps(Canvas canvas, Bitmap bitmap) {
-        paint.setColor(Color.rgb(255, 255, 100));
+        bitmapPaint.setColor(Color.rgb(255, 255, 100));
         float ratio = SCALE * cakeBitmap.getWidth() / bitmap.getWidth();
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 3; j++) {
                 drawMatrix.reset();
                 drawMatrix.postScale(SCALE, SCALE);
                 drawMatrix.postTranslate(halfway + i * SCALE * cakeBitmap.getWidth(), j * SCALE * cakeBitmap.getHeight());
-                canvas.drawBitmap(cakeBitmap, drawMatrix, paint);
+                canvas.drawBitmap(cakeBitmap, drawMatrix, bitmapPaint);
 
                 drawMatrix.reset();
                 drawMatrix.postScale(ratio, ratio);
                 drawMatrix.postTranslate(halfway + i * ratio * bitmap.getWidth(), halfway + j * ratio * bitmap.getHeight());
-                canvas.drawBitmap(bitmap, drawMatrix, paint);
+                canvas.drawBitmap(bitmap, drawMatrix, bitmapPaint);
             }
         }
     }
@@ -127,34 +129,7 @@ public class MyView extends View {
         float ratio = halfway / foursquareBitmap.getWidth();
         drawMatrix.postScale(ratio, ratio);
         drawMatrix.postTranslate(0, halfway);
-        canvas.drawBitmap(foursquareBitmap, drawMatrix, paint);
-    }
-
-    private void paintTestSpriteGrid(Canvas canvas) {
-        for (int x = 0; x < SPRITE_SIZE; x++) {
-            for (int y = 0; y < SPRITE_SIZE; y++) {
-                float x1 = x * blockSize;
-                float y1 = y * blockSize;
-                float x2 = x1 + blockSize - 3;
-                float y2 = y1 + blockSize - 3;
-                if (touchX >= x1 && touchX <= x2 && touchY >= y1 && touchY <= y2) {
-                    paint.setColor(Color.rgb(220, 255, 220));
-                } else {
-                    paint.setColor(Color.rgb(255 * x / SPRITE_SIZE, 255 * y / SPRITE_SIZE, 255 - 255 * x / SPRITE_SIZE * y / SPRITE_SIZE));
-                }
-                canvas.drawRect(x1, y1, x2, y2, paint);
-            }
-        }
-    }
-
-    private void paintTestPattern(Canvas canvas) {
-        paint.setColor(Color.rgb(255, 0, 0));
-        for (int i = 0; i <= halfway; i += halfway / 50) {
-            canvas.drawLine(i, halfway, halfway, halfway - i, paint);
-            canvas.drawLine(i, halfway, halfway, halfway + i, paint);
-            canvas.drawLine(halfway * 2 - i, halfway, halfway, halfway - i, paint);
-            canvas.drawLine(halfway * 2 - i, halfway, halfway, halfway + i, paint);
-        }
+        canvas.drawBitmap(foursquareBitmap, drawMatrix, bitmapPaint);
     }
 
     @Override

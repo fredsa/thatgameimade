@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Shader;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -29,13 +30,20 @@ public class PixelGridView extends View {
     private float scale;
 
     {
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.checker_gray);
-        bitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth() * 16, bitmap.getHeight() * 16, false);
-        BitmapShader bgShader = new BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+        bgPaint = makeBgPaint();
+        spritePaint = new Paint();
+    }
+
+    private Paint makeBgPaint() {
+        Paint bgPaint;
+        Bitmap bgBitmap;
+        BitmapShader bgShader;
+        bgBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.checker_gray);
+        bgBitmap = Bitmap.createScaledBitmap(bgBitmap, bgBitmap.getWidth() * 16, bgBitmap.getHeight() * 16, false);
+        bgShader = new BitmapShader(bgBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
         bgPaint = new Paint();
         bgPaint.setShader(bgShader);
-
-        spritePaint = new Paint();
+        return bgPaint;
     }
 
     private MainActivity mainActivity;
@@ -62,10 +70,11 @@ public class PixelGridView extends View {
     protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
         canvasWidth = width;
         canvasHeight = height;
+        shortSide = Math.min(canvasWidth, canvasHeight);
+
         if (spriteBitmap == null) {
             return;
         }
-        shortSide = Math.min(canvasWidth, canvasHeight);
         scale = Math.min((float) canvasWidth / spriteBitmap.getCurrentBitmap().getWidth(),
                 (float) canvasHeight / spriteBitmap.getCurrentBitmap().getHeight());
         drawMatrix.reset();
@@ -79,7 +88,7 @@ public class PixelGridView extends View {
         // draw background
         canvas.drawRect(0, 0, shortSide, shortSide, bgPaint);
 
-        if (isInEditMode()) {
+        if (shortSide == 0 || isInEditMode()) {
             return;
         }
 
@@ -98,14 +107,14 @@ public class PixelGridView extends View {
             spriteBitmap.resetBitmap();
         }
 
-        Bitmap bitmap = spriteBitmap.getCurrentBitmap();
+        Bitmap currentBitmap = spriteBitmap.getCurrentBitmap();
         int x = (int) (event.getX() / scale);
         int y = (int) (event.getY() / scale);
-        if (x < 0 || y < 0 || x >= bitmap.getWidth() || y >= bitmap.getHeight()) {
+        if (x < 0 || y < 0 || x >= currentBitmap.getWidth() || y >= currentBitmap.getHeight()) {
             return false;
         }
 
-        bitmap.setPixel(x, y, drawingColor);
+        currentBitmap.setPixel(x, y, drawingColor);
         mainActivity.invalidateViews();
         return true;
     }
