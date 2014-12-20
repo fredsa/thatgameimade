@@ -59,7 +59,6 @@ public class MyView extends View {
         super(context, attrs, defStyleAttr);
     }
 
-
     @Override
     protected void onSizeChanged(int weight, int height, int oldWidth, int oldHeight) {
         canvasWidth = weight;

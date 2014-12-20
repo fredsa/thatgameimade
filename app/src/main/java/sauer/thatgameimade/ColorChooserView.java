@@ -4,7 +4,9 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.Shader;
 import android.graphics.SweepGradient;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -14,13 +16,8 @@ import android.view.View;
 
 public class ColorChooserView extends View {
 
-    private int canvasWidth;
-    private int canvasHeight;
-    private int shortSide;
-    private Paint wheelPaint;
-    private Paint bgPaint;
-    private Paint currentColorPaint;
     private String TAG = ColorChooserView.class.getSimpleName();
+
     public static final int[] COLORS = new int[]{
             Color.RED,
             Color.YELLOW,
@@ -38,9 +35,8 @@ public class ColorChooserView extends View {
             300f / 360f,
             360f / 360f,
     };
-    private float[] hsvFloats = new float[]{0f, 1f, 1f};
-    private MainActivity mainActivity;
 
+    private float[] hsvFloats = new float[]{0f, 1f, 1f};
 
     public ColorChooserView(Context context) {
         super(context);
@@ -59,14 +55,15 @@ public class ColorChooserView extends View {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    @Override
-    protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
-        canvasWidth = width;
-        canvasHeight = height;
-        shortSide = Math.min(width, height);
+    private MainActivity mainActivity;
 
-        wheelPaint.setShader(new SweepGradient(shortSide / 2, shortSide / 2, COLORS, POSITIONS));
-    }
+    private final Paint sliderPaint;
+    private int canvasWidth;
+    private int canvasHeight;
+    private int shortSide;
+    private Paint wheelPaint;
+    private Paint bgPaint;
+    private Paint currentColorPaint;
 
     {
         bgPaint = new Paint();
@@ -74,22 +71,43 @@ public class ColorChooserView extends View {
 
         wheelPaint = new Paint();
 
+        sliderPaint = new Paint();
+
         currentColorPaint = new Paint();
         currentColorPaint.setColor(Color.WHITE);
     }
 
     @Override
+    protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+        canvasWidth = width;
+        canvasHeight = height;
+        shortSide = Math.min(width, height);
+
+        wheelPaint.setShader(new SweepGradient(shortSide / 2, shortSide / 2, COLORS, POSITIONS));
+
+        updateSliderPaint();
+    }
+
+    private void updateSliderPaint() {
+        int fromColor = currentColorPaint.getColor() | 0xFFFFFFFF;
+        int toColor = currentColorPaint.getColor() | 0xFF000000;
+        sliderPaint.setShader(new LinearGradient(0, 0, 0, canvasHeight, fromColor, toColor, Shader.TileMode.CLAMP));
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        updateSliderPaint();
+
         canvas.drawRect(0, 0, canvasWidth, canvasHeight, bgPaint);
 
-        canvas.rotate(-90, shortSide / 2, shortSide / 2);
+        canvas.drawRect(canvasWidth * .8f, 30, canvasWidth * .9f, canvasHeight - 30, sliderPaint);
 
+        canvas.rotate(-90, shortSide / 2, shortSide / 2);
         canvas.drawCircle(shortSide / 2, shortSide / 2, shortSide / 2 * .9f, wheelPaint);
         canvas.drawCircle(shortSide / 2, shortSide / 2, shortSide / 2 * .8f, bgPaint);
-
         canvas.drawCircle(shortSide / 2, shortSide / 2, shortSide / 2 * .3f, currentColorPaint);
-
     }
 
     @Override
@@ -107,6 +125,7 @@ public class ColorChooserView extends View {
         int color = toHSV(degrees);
         currentColorPaint.setColor(color);
         mainActivity.setDrawingColor(color);
+        updateSliderPaint();
         invalidate();
         return true;
     }
