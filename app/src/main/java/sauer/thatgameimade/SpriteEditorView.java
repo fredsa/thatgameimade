@@ -36,6 +36,8 @@ public class SpriteEditorView extends View {
     private Paint brushPaint;
     private int shortSide;
     private Canvas canvas;
+    private float lastX;
+    private float lastY;
 
     public SpriteEditorView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -97,19 +99,28 @@ public class SpriteEditorView extends View {
             return false;
         }
 
-        int x = (int) (event.getX() / scale);
-        int y = (int) (event.getY() / scale);
-        if (x < 0 || y < 0 || x >= spriteBitmap.getWidth() || y >= spriteBitmap.getHeight()) {
-            return false;
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            lastX = event.getX() / scale;
+            lastY = event.getY() / scale;
         }
-
-        canvas.drawLine(0f, 0f, (float) x, (float) y, brushPaint);
+        for (int i = 0; i < event.getHistorySize(); i++) {
+            drawTo(event.getHistoricalX(i), event.getHistoricalY(i));
+        }
+        drawTo(event.getX(), event.getY());
 
         if (onBitmapChangedListener != null) {
             onBitmapChangedListener.bitMapChanged(this, spriteBitmap);
         }
 
         return true;
+    }
+
+    private void drawTo(float x, float y) {
+        float newX = x / scale;
+        float newY = y / scale;
+        canvas.drawLine(lastX, lastY, newX, newY, brushPaint);
+        lastX = newX;
+        lastY = newY;
     }
 
     public void setSpriteBitmap(Bitmap spriteBitmap) {
