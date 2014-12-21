@@ -1,6 +1,8 @@
 <resources>
 
-    <color name="black_overlay">#66000000</color>
-    <color name="blueish" >#00f</color>
+    <color name="blue">#44c</color>
+    <color name="green">#4c4</color>
+    <color name="red">#c44</color>
+    <color name="purple">#ff4</color>
 
 </resources>

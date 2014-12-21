@@ -1,40 +1,68 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/blueish"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:keepScreenOn="true"
     android:orientation="horizontal">
 
+    <!--<LinearLayout-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="fill_parent"-->
+    <!--android:orientation="vertical">-->
+
+    <!--&lt;!&ndash;<sauer.thatgameimade.SpriteSelectorView&ndash;&gt;-->
+    <!--&lt;!&ndash;android:id="@+id/spriteSelectorView"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_width="fill_parent"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_height="fill_parent" />&ndash;&gt;-->
+
+    <!--</LinearLayout>-->
+
+
     <LinearLayout
-        android:layout_weight="2"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_weight="2"
         android:orientation="vertical">
 
         <sauer.thatgameimade.SpriteEditorView
             android:id="@+id/pixelGridView"
-            android:layout_weight="2"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
+            android:layout_height="fill_parent"
+            android:layout_weight="2" />
 
         <sauer.thatgameimade.ColorPickerView
             android:id="@+id/colorChooserView"
-            android:layout_weight="3"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
+            android:layout_height="fill_parent"
+            android:layout_weight="3" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_weight="1"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_weight="2"
         android:orientation="vertical">
 
         <sauer.thatgameimade.LevelEditorView
             android:id="@+id/myView"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
+            android:layout_height="fill_parent"
+            android:layout_weight="2" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="3"
+        android:orientation="vertical">
+
+        <sauer.thatgameimade.SpriteSelectorView
+            android:id="@+id/spriteSelectorView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:fillViewport="true" />
 
     </LinearLayout>
 

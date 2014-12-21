@@ -14,11 +14,9 @@ import android.view.View;
 
 public class LevelEditorView extends View {
 
+    public static final float SCALE = 1f;
     @SuppressWarnings("unused")
     private static final String TAG = LevelEditorView.class.getSimpleName();
-
-    public static final float SCALE = 1f;
-
     private final Paint bgPaint;
     private final Paint touchPaint;
     private final Paint bitmapPaint;
@@ -44,7 +42,6 @@ public class LevelEditorView extends View {
 
     private int canvasWidth;
     private int canvasHeight;
-    private float halfway;
     private Matrix drawMatrix = new Matrix();
 
 
@@ -60,7 +57,6 @@ public class LevelEditorView extends View {
     protected void onSizeChanged(int weight, int height, int oldWidth, int oldHeight) {
         canvasWidth = weight;
         canvasHeight = height;
-        halfway = Math.min(canvasWidth, canvasHeight) / 2;
     }
 
     @Override
@@ -101,16 +97,19 @@ public class LevelEditorView extends View {
     private void paintBitmaps(Canvas canvas, Bitmap bitmap) {
         bitmapPaint.setColor(Color.rgb(255, 255, 100));
         float ratio = SCALE * cakeBitmap.getWidth() / bitmap.getWidth();
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 3; j++) {
+        int rows = 2;
+        int cols = 5;
+        float y2 = rows * SCALE * cakeBitmap.getHeight();
+        for (int i = 0; i < cols; i++) {
+            for (int j = 0; j < rows; j++) {
                 drawMatrix.reset();
                 drawMatrix.postScale(SCALE, SCALE);
-                drawMatrix.postTranslate(halfway + i * SCALE * cakeBitmap.getWidth(), j * SCALE * cakeBitmap.getHeight());
+                drawMatrix.postTranslate(i * SCALE * cakeBitmap.getWidth(), j * SCALE * cakeBitmap.getHeight());
                 canvas.drawBitmap(cakeBitmap, drawMatrix, bitmapPaint);
 
                 drawMatrix.reset();
                 drawMatrix.postScale(ratio, ratio);
-                drawMatrix.postTranslate(halfway + i * ratio * bitmap.getWidth(), halfway + j * ratio * bitmap.getHeight());
+                drawMatrix.postTranslate(i * ratio * bitmap.getWidth(), y2 + j * ratio * bitmap.getHeight());
                 canvas.drawBitmap(bitmap, drawMatrix, bitmapPaint);
             }
         }

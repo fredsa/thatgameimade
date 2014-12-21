@@ -19,10 +19,9 @@ public class SpriteEditorView extends View {
 
     @SuppressWarnings("unused")
     private static final String TAG = SpriteEditorView.class.getSimpleName();
-
-    private Bitmap spriteBitmap;
     private final Paint bgPaint;
     private final Paint spritePaint;
+    private Bitmap spriteBitmap;
     private float scale;
 
     {
@@ -31,6 +30,15 @@ public class SpriteEditorView extends View {
     }
 
     private OnBitmapChangedListener onBitmapChangedListener;
+    private int canvasWidth;
+    private int canvasHeight;
+    private Matrix drawMatrix = new Matrix();
+    private int drawingColor;
+    private int shortSide;
+
+    public SpriteEditorView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
 
     private Paint makeBgPaint() {
         Paint bgPaint;
@@ -42,16 +50,6 @@ public class SpriteEditorView extends View {
         bgPaint = new Paint();
         bgPaint.setShader(bgShader);
         return bgPaint;
-    }
-
-    private int canvasWidth;
-    private int canvasHeight;
-    private Matrix drawMatrix = new Matrix();
-    private int drawingColor;
-    private int shortSide;
-
-    public SpriteEditorView(Context context, AttributeSet attrs) {
-        super(context, attrs);
     }
 
     @Override
@@ -73,12 +71,12 @@ public class SpriteEditorView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        // draw background
-        canvas.drawRect(0, 0, shortSide, shortSide, bgPaint);
-
         if (shortSide == 0 || isInEditMode()) {
             return;
         }
+
+        // draw background
+        canvas.drawRect(0, 0, shortSide, shortSide, bgPaint);
 
         if (spriteBitmap == null) {
             Log.w(TAG, "bitmap not set");
