@@ -4,10 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-
-import java.util.Date;
 
 public class MainActivity extends Activity {
 
@@ -17,7 +14,6 @@ public class MainActivity extends Activity {
     private PixelGridView pixelGridView;
     private AdvancedBitmap spriteBitmap;
     private ColorChooserView colorChooserView;
-    private int drawingColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +25,17 @@ public class MainActivity extends Activity {
         spriteBitmap = new AdvancedBitmap(bitmap);
         pixelGridView = (PixelGridView) findViewById(R.id.pixelGridView);
 
-//        myView.setMainActivity(this);
         pixelGridView.setMainActivity(this);
         myView.setAdvancedBitmap(spriteBitmap);
         pixelGridView.setAdvancedBitmap(spriteBitmap);
 
         colorChooserView = (ColorChooserView) findViewById(R.id.colorChooserView);
-        colorChooserView.setMainActivity(this);
+        colorChooserView.setOnColorChangeListener(new ColorChooserView.OnColorChangeListener() {
+            @Override
+            public void onColor(View v, int color) {
+                pixelGridView.setDrawingColor(color);
+            }
+        });
     }
 
     @Override
@@ -55,8 +55,4 @@ public class MainActivity extends Activity {
         colorChooserView.invalidate();
     }
 
-    public void setDrawingColor(int drawingColor) {
-        this.drawingColor = drawingColor;
-        pixelGridView.setDrawingColor(drawingColor);
-    }
 }

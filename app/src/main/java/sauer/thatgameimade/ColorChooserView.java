@@ -35,12 +35,11 @@ public class ColorChooserView extends View {
     };
 
     private float[] hsvFloats = new float[]{0f, 1f, 1f};
+    private OnColorChangeListener onColorChangeListener;
 
     public ColorChooserView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-
-    private MainActivity mainActivity;
 
     private final Paint sliderPaint;
     private int canvasWidth;
@@ -108,11 +107,17 @@ public class ColorChooserView extends View {
                 ); // range: [0, 1]
         float degrees = (sweepNumber * 360 + 90) % 360;
         int color = toHSV(degrees);
-        currentColorPaint.setColor(color);
-        mainActivity.setDrawingColor(color);
-        updateSliderPaint();
+        updateColor(color);
         invalidate();
         return true;
+    }
+
+    private void updateColor(int color) {
+        currentColorPaint.setColor(color);
+        updateSliderPaint();
+        if (onColorChangeListener != null) {
+            onColorChangeListener.onColor(this, color);
+        }
     }
 
     private int toHSV(float degrees) {
@@ -121,7 +126,11 @@ public class ColorChooserView extends View {
         return Color.HSVToColor(hsv);
     }
 
-    public void setMainActivity(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
+    public void setOnColorChangeListener(OnColorChangeListener onColorChangeListener) {
+        this.onColorChangeListener = onColorChangeListener;
+    }
+
+    public interface OnColorChangeListener {
+        void onColor(View v, int color);
     }
 }
