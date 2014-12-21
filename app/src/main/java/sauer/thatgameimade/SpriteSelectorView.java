@@ -19,9 +19,9 @@ public class SpriteSelectorView extends ScrollView {
 
     public SpriteSelectorView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        if (isInEditMode()) {
-            return;
-        }
+//        if (isInEditMode()) {
+//            return;
+//        }
         init(context);
     }
 

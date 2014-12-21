@@ -3,6 +3,7 @@ package sauer.thatgameimade;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,10 +43,10 @@ public class MainActivity extends Activity {
         });
 
         colorPickerView = (ColorPickerView) findViewById(R.id.colorChooserView);
-        colorPickerView.setOnColorChangeListener(new ColorPickerView.OnColorChangeListener() {
+        colorPickerView.setOnPaintChangeListener(new ColorPickerView.OnPaintChangeListener() {
             @Override
-            public void onColor(View v, int color) {
-                spriteEditorView.setDrawingColor(color);
+            public void onPaint(View v, Paint paint) {
+                spriteEditorView.setBrushPaint(paint);
             }
         });
 

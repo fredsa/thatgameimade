@@ -14,9 +14,6 @@ import android.view.View;
 
 public class ColorPickerView extends View {
 
-    @SuppressWarnings("unused")
-    private String TAG = ColorPickerView.class.getSimpleName();
-
     public static final int[] COLORS = new int[]{
             Color.RED,
             Color.YELLOW,
@@ -34,21 +31,17 @@ public class ColorPickerView extends View {
             300f / 360f,
             360f / 360f,
     };
-
-    private float[] hsvFloats = new float[]{0f, 1f, 1f};
-    private OnColorChangeListener onColorChangeListener;
-
-    public ColorPickerView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
     private final Paint sliderPaint;
+    @SuppressWarnings("unused")
+    private String TAG = ColorPickerView.class.getSimpleName();
+    private float[] hsvFloats = new float[]{0f, 1f, 1f};
+    private OnPaintChangeListener onPaintChangeListener;
     private int canvasWidth;
     private int canvasHeight;
     private int shortSide;
     private Paint wheelPaint;
     private Paint bgPaint;
-    private Paint currentColorPaint;
+    private Paint brushPaint;
 
     {
         bgPaint = new Paint();
@@ -58,8 +51,12 @@ public class ColorPickerView extends View {
 
         sliderPaint = new Paint();
 
-        currentColorPaint = new Paint();
-        currentColorPaint.setColor(Color.WHITE);
+        brushPaint = new Paint();
+        brushPaint.setColor(Color.WHITE);
+    }
+
+    public ColorPickerView(Context context, AttributeSet attrs) {
+        super(context, attrs);
     }
 
     @Override
@@ -86,7 +83,7 @@ public class ColorPickerView extends View {
         canvas.rotate(-90, shortSide / 2, shortSide / 2);
         canvas.drawCircle(shortSide / 2, shortSide / 2, shortSide / 2 * .9f, wheelPaint);
         canvas.drawCircle(shortSide / 2, shortSide / 2, shortSide / 2 * .8f, bgPaint);
-        canvas.drawCircle(shortSide / 2, shortSide / 2, shortSide / 2 * .3f, currentColorPaint);
+        canvas.drawCircle(shortSide / 2, shortSide / 2, shortSide / 2 * .3f, brushPaint);
     }
 
     @Override
@@ -111,17 +108,17 @@ public class ColorPickerView extends View {
     }
 
     private void updateColor(int color) {
-        currentColorPaint.setColor(color);
+        brushPaint.setColor(color);
         updateSliderPaint();
-        if (onColorChangeListener != null) {
-            onColorChangeListener.onColor(this, color);
+        if (onPaintChangeListener != null) {
+            onPaintChangeListener.onPaint(this, brushPaint);
         }
         invalidate();
     }
 
     private void updateSliderPaint() {
         int fromColor = 0xFFFFFFFF;
-        int toColor = currentColorPaint.getColor() | 0xFF000000;
+        int toColor = brushPaint.getColor() | 0xFF000000;
         sliderPaint.setShader(new LinearGradient(0, 0, 0, canvasHeight, fromColor, toColor, Shader.TileMode.CLAMP));
     }
 
@@ -131,11 +128,12 @@ public class ColorPickerView extends View {
         return Color.HSVToColor(hsv);
     }
 
-    public void setOnColorChangeListener(OnColorChangeListener onColorChangeListener) {
-        this.onColorChangeListener = onColorChangeListener;
+    public void setOnPaintChangeListener(OnPaintChangeListener onPaintChangeListener) {
+        this.onPaintChangeListener = onPaintChangeListener;
+        onPaintChangeListener.onPaint(this, brushPaint);
     }
 
-    public interface OnColorChangeListener {
-        void onColor(View v, int color);
+    public interface OnPaintChangeListener {
+        void onPaint(View v, Paint paint);
     }
 }

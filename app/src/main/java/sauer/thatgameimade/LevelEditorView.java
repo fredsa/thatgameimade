@@ -65,12 +65,14 @@ public class LevelEditorView extends View {
 
         paintBackground(canvas);
 
-        if (isInEditMode()) {
-            return;
-        }
+//        if (isInEditMode()) {
+//            return;
+//        }
 
-        paintBitmaps(canvas, spriteBitmap);
-        paintSpriteWhenTouched(canvas, spriteBitmap);
+        if (spriteBitmap != null) {
+            paintBitmaps(canvas, spriteBitmap);
+            paintSpriteWhenTouched(canvas, spriteBitmap);
+        }
         paintDotWhenTouched(canvas);
     }
 

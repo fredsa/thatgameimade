@@ -33,8 +33,9 @@ public class SpriteEditorView extends View {
     private int canvasWidth;
     private int canvasHeight;
     private Matrix drawMatrix = new Matrix();
-    private int drawingColor;
+    private Paint brushPaint;
     private int shortSide;
+    private Canvas canvas;
 
     public SpriteEditorView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -75,9 +76,9 @@ public class SpriteEditorView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (shortSide == 0 || isInEditMode()) {
-            return;
-        }
+//        if (shortSide == 0 || isInEditMode()) {
+//            return;
+//        }
 
         // draw background
         canvas.drawRect(0, 0, shortSide, shortSide, bgPaint);
@@ -102,7 +103,8 @@ public class SpriteEditorView extends View {
             return false;
         }
 
-        spriteBitmap.setPixel(x, y, drawingColor);
+        canvas.drawLine(0f, 0f, (float) x, (float) y, brushPaint);
+
         if (onBitmapChangedListener != null) {
             onBitmapChangedListener.bitMapChanged(this, spriteBitmap);
         }
@@ -112,11 +114,12 @@ public class SpriteEditorView extends View {
 
     public void setSpriteBitmap(Bitmap spriteBitmap) {
         this.spriteBitmap = spriteBitmap;
+        canvas = new Canvas(spriteBitmap);
         recalculateScale();
     }
 
-    public void setDrawingColor(int drawingColor) {
-        this.drawingColor = drawingColor;
+    public void setBrushPaint(Paint brushPaint) {
+        this.brushPaint = brushPaint;
     }
 
     public void setOnBitmapChangedListener(OnBitmapChangedListener onBitmapChangedListener) {
