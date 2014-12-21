@@ -61,6 +61,10 @@ public class SpriteEditorView extends View {
         if (spriteBitmap == null) {
             return;
         }
+        recalculateScale();
+    }
+
+    private void recalculateScale() {
         scale = Math.min((float) canvasWidth / spriteBitmap.getWidth(),
                 (float) canvasHeight / spriteBitmap.getHeight());
         drawMatrix.reset();
@@ -108,6 +112,7 @@ public class SpriteEditorView extends View {
 
     public void setSpriteBitmap(Bitmap spriteBitmap) {
         this.spriteBitmap = spriteBitmap;
+        recalculateScale();
     }
 
     public void setDrawingColor(int drawingColor) {

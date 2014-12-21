@@ -49,6 +49,14 @@ public class MainActivity extends Activity {
             }
         });
 
+        SpriteSelectorView spriteSelectorView = (SpriteSelectorView) findViewById(R.id.spriteSelectorView);
+        spriteSelectorView.setOnSpriteSelectedListener(new SpriteSelectorView.OnSpriteSelectedListener() {
+            @Override
+            public void spriteSelected(View view, Bitmap bitmap) {
+                setBitmap(bitmap);
+            }
+        });
+
         loadBitmap();
     }
 
@@ -59,6 +67,10 @@ public class MainActivity extends Activity {
 
     private void loadBitmap() {
         Bitmap spriteBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.face).copy(Bitmap.Config.ARGB_8888, true);
+        setBitmap(spriteBitmap);
+    }
+
+    private void setBitmap(Bitmap spriteBitmap) {
         levelEditorView.setSpriteBitmap(spriteBitmap);
         spriteEditorView.setSpriteBitmap(spriteBitmap);
         invalidateBitmapViews();

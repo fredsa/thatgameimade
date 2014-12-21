@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.support.annotation.DrawableRes;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ScrollView;
 
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 public class SpriteSelectorView extends ScrollView {
 
     public ArrayList<SpriteInfo> SPRITES;
+    private OnSpriteSelectedListener onSpriteSelectedListener;
 
     public SpriteSelectorView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -33,9 +35,18 @@ public class SpriteSelectorView extends ScrollView {
         }
 
         View.inflate(context, R.layout.spite_selector_view, this);
-        SpriteArrayAdapter adapter = new SpriteArrayAdapter(context, R.layout.spite_selector_view, SPRITES);
-        ListView spritePickerListView = (ListView) findViewById(R.id.spriteListView);
+        final SpriteArrayAdapter adapter = new SpriteArrayAdapter(context, R.layout.spite_selector_view, SPRITES);
+        final ListView spritePickerListView = (ListView) findViewById(R.id.spriteListView);
         spritePickerListView.setAdapter(adapter);
+
+        spritePickerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (onSpriteSelectedListener != null) {
+                    onSpriteSelectedListener.spriteSelected(view, adapter.getItem(position).getBitmap());
+                }
+            }
+        });
     }
 
     private SpriteInfo makeBitmap(String name, @DrawableRes int drawable) {
@@ -43,4 +54,11 @@ public class SpriteSelectorView extends ScrollView {
         return new SpriteInfo(name, bitmap);
     }
 
+    public void setOnSpriteSelectedListener(OnSpriteSelectedListener onSpriteSelectedListener) {
+        this.onSpriteSelectedListener = onSpriteSelectedListener;
+    }
+
+    public interface OnSpriteSelectedListener {
+        void spriteSelected(View view, Bitmap bitmap);
+    }
 }
