@@ -132,11 +132,14 @@ public class MyView extends View {
 
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
-        float x = event.getX();
-        float y = event.getY();
-        float touchMajor = event.getTouchMajor();
-        placeDot(x, y, touchMajor);
-        return true;
+        if (event.getPointerCount() == 1) {
+            float x = event.getX();
+            float y = event.getY();
+            float touchMajor = event.getTouchMajor();
+            placeDot(x, y, touchMajor);
+            return true;
+        }
+        return false;
     }
 
     public void placeDot(float x, float y, float touchMajor) {

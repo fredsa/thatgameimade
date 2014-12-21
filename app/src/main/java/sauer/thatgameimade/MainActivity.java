@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class MainActivity extends Activity {
@@ -15,21 +16,26 @@ public class MainActivity extends Activity {
     private ColorChooserView colorChooserView;
 
     @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getPointerCount() != 2) {
+            return false;
+        }
+
+        loadBitmap();
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         myView = (MyView) findViewById(R.id.myView);
 
-        Bitmap spriteBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.face).copy(Bitmap.Config.ARGB_8888, true);
         pixelGridView = (PixelGridView) findViewById(R.id.pixelGridView);
-
-        myView.setSpriteBitmap(spriteBitmap);
-        pixelGridView.setSpriteBitmap(spriteBitmap);
         pixelGridView.setOnBitmapChangedListener(new PixelGridView.OnBitmapChangedListener() {
             @Override
             public void bitMapChanged(View view, Bitmap bitmap) {
-                pixelGridView.invalidate();
-                myView.invalidate();
+                invalidateBitmapViews();
             }
         });
 
@@ -40,6 +46,20 @@ public class MainActivity extends Activity {
                 pixelGridView.setDrawingColor(color);
             }
         });
+
+        loadBitmap();
+    }
+
+    private void invalidateBitmapViews() {
+        pixelGridView.invalidate();
+        myView.invalidate();
+    }
+
+    private void loadBitmap() {
+        Bitmap spriteBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.face).copy(Bitmap.Config.ARGB_8888, true);
+        myView.setSpriteBitmap(spriteBitmap);
+        pixelGridView.setSpriteBitmap(spriteBitmap);
+        invalidateBitmapViews();
     }
 
     @Override

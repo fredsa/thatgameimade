@@ -89,9 +89,9 @@ public class PixelGridView extends View {
 
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
-//        if (event.getPointerCount() > 1) {
-//            spriteBitmap.resetBitmap();
-//        }
+        if (event.getPointerCount() > 1) {
+            return false;
+        }
 
         int x = (int) (event.getX() / scale);
         int y = (int) (event.getY() / scale);

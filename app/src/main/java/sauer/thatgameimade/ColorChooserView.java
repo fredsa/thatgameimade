@@ -90,6 +90,10 @@ public class ColorChooserView extends View {
 
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
+        if (event.getPointerCount() > 1) {
+            return false;
+        }
+
         float deltaX = event.getX() - shortSide / 2;
         float deltaY = -(event.getY() - shortSide / 2);
         double radians = Math.atan2(deltaY, deltaX); // range: [-Math.PI, Math.PI]
