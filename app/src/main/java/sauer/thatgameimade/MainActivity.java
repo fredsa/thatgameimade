@@ -21,7 +21,6 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.w(TAG, "-------------------------------------------" + new Date());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         myView = (MyView) findViewById(R.id.myView);

@@ -6,7 +6,9 @@
         android:allowBackup="true"
         android:icon="@drawable/kenny_game"
         android:label="@string/app_name"
+        android:name=".MyApplication"
         android:theme="@style/AppTheme" >
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

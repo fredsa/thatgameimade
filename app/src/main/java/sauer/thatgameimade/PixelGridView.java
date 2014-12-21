@@ -5,11 +5,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Shader;
-import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -17,9 +15,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 
-/**
- * TODO: document your custom view class.
- */
 public class PixelGridView extends View {
 
     private static final String TAG = PixelGridView.class.getSimpleName();
