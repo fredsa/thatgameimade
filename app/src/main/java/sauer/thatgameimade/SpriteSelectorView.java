@@ -35,7 +35,7 @@ public class SpriteSelectorView extends ScrollView {
         }
 
         View.inflate(context, R.layout.spite_selector_view, this);
-        final SpriteArrayAdapter adapter = new SpriteArrayAdapter(context, R.layout.spite_selector_view, SPRITES);
+        final SpriteArrayAdapter adapter = new SpriteArrayAdapter(context, R.layout.sprite_list_item, SPRITES);
         final ListView spritePickerListView = (ListView) findViewById(R.id.spriteListView);
         spritePickerListView.setAdapter(adapter);
 

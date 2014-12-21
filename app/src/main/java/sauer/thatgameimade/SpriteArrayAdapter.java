@@ -14,10 +14,12 @@ import java.util.ArrayList;
 public class SpriteArrayAdapter extends ArrayAdapter<SpriteInfo> {
     @SuppressWarnings("unused")
     private static final String TAG = SpriteArrayAdapter.class.getSimpleName();
+    private int layoutResource;
     private ArrayList<SpriteInfo> sprites;
 
     public SpriteArrayAdapter(Context context, @LayoutRes int resource, ArrayList<SpriteInfo> sprites) {
-        super(context, resource, sprites);
+        super(context, -1, sprites);
+        layoutResource = resource;
         this.sprites = sprites;
     }
 
@@ -26,7 +28,7 @@ public class SpriteArrayAdapter extends ArrayAdapter<SpriteInfo> {
         SpriteInfo sprite = getItem(position);
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.sprite_list_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(layoutResource, parent, false);
         }
 
         TextView spriteNameTextView = (TextView) convertView.findViewById(R.id.spriteNameTextView);

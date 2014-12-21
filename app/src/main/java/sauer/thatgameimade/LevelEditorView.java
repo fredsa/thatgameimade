@@ -82,7 +82,8 @@ public class LevelEditorView extends View {
         if (touchMajor > 0) {
             drawMatrix.reset();
             drawMatrix.postTranslate(-bitmap.getWidth() / 2, -bitmap.getHeight() / 2);
-            drawMatrix.postScale(50, 50);
+            float scale = 200f / bitmap.getWidth();
+            drawMatrix.postScale(scale, scale);
             drawMatrix.postTranslate(touchX, touchY);
             canvas.drawBitmap(bitmap, drawMatrix, bitmapPaint);
         }
@@ -118,20 +119,13 @@ public class LevelEditorView extends View {
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         if (event.getPointerCount() == 1) {
-            float x = event.getX();
-            float y = event.getY();
-            float touchMajor = event.getTouchMajor();
-            placeDot(x, y, touchMajor);
+            this.touchX = event.getX();
+            this.touchY = event.getY();
+            this.touchMajor = event.getTouchMajor();
+            invalidate();
             return true;
         }
         return false;
-    }
-
-    public void placeDot(float x, float y, float touchMajor) {
-        this.touchX = x;
-        this.touchY = y;
-        this.touchMajor = touchMajor;
-        invalidate();
     }
 
     public void setSpriteBitmap(Bitmap spriteBitmap) {
