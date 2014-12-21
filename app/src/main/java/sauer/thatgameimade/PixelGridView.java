@@ -18,7 +18,7 @@ import android.view.View;
 public class PixelGridView extends View {
 
     private static final String TAG = PixelGridView.class.getSimpleName();
-    private AdvancedBitmap spriteBitmap;
+    private Bitmap spriteBitmap;
 
     private final Paint bgPaint;
     private final Paint spritePaint;
@@ -28,6 +28,8 @@ public class PixelGridView extends View {
         bgPaint = makeBgPaint();
         spritePaint = new Paint();
     }
+
+    private OnBitmapChangedListener onBitmapChangedListener;
 
     private Paint makeBgPaint() {
         Paint bgPaint;
@@ -41,7 +43,6 @@ public class PixelGridView extends View {
         return bgPaint;
     }
 
-    private MainActivity mainActivity;
     private int canvasWidth;
     private int canvasHeight;
     private Matrix drawMatrix = new Matrix();
@@ -61,8 +62,8 @@ public class PixelGridView extends View {
         if (spriteBitmap == null) {
             return;
         }
-        scale = Math.min((float) canvasWidth / spriteBitmap.getCurrentBitmap().getWidth(),
-                (float) canvasHeight / spriteBitmap.getCurrentBitmap().getHeight());
+        scale = Math.min((float) canvasWidth / spriteBitmap.getWidth(),
+                (float) canvasHeight / spriteBitmap.getHeight());
         drawMatrix.reset();
         drawMatrix.postScale(scale, scale);
     }
@@ -83,37 +84,42 @@ public class PixelGridView extends View {
             return;
         }
 
-        Bitmap bitmap = spriteBitmap.getCurrentBitmap();
-        canvas.drawBitmap(bitmap, drawMatrix, spritePaint);
+        canvas.drawBitmap(spriteBitmap, drawMatrix, spritePaint);
     }
 
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
-        if (event.getPointerCount() > 1) {
-            spriteBitmap.resetBitmap();
-        }
+//        if (event.getPointerCount() > 1) {
+//            spriteBitmap.resetBitmap();
+//        }
 
-        Bitmap currentBitmap = spriteBitmap.getCurrentBitmap();
         int x = (int) (event.getX() / scale);
         int y = (int) (event.getY() / scale);
-        if (x < 0 || y < 0 || x >= currentBitmap.getWidth() || y >= currentBitmap.getHeight()) {
+        if (x < 0 || y < 0 || x >= spriteBitmap.getWidth() || y >= spriteBitmap.getHeight()) {
             return false;
         }
 
-        currentBitmap.setPixel(x, y, drawingColor);
-        mainActivity.invalidateViews();
+        spriteBitmap.setPixel(x, y, drawingColor);
+        if (onBitmapChangedListener != null) {
+            onBitmapChangedListener.bitMapChanged(this, spriteBitmap);
+        }
+
         return true;
     }
 
-    public void setAdvancedBitmap(AdvancedBitmap spriteBitmap) {
+    public void setSpriteBitmap(Bitmap spriteBitmap) {
         this.spriteBitmap = spriteBitmap;
-    }
-
-    public void setMainActivity(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
     }
 
     public void setDrawingColor(int drawingColor) {
         this.drawingColor = drawingColor;
+    }
+
+    public void setOnBitmapChangedListener(OnBitmapChangedListener onBitmapChangedListener) {
+        this.onBitmapChangedListener = onBitmapChangedListener;
+    }
+
+    public interface OnBitmapChangedListener {
+        void bitMapChanged(View view, Bitmap bitmap);
     }
 }

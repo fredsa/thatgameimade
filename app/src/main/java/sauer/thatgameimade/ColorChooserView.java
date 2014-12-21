@@ -72,12 +72,6 @@ public class ColorChooserView extends View {
         updateSliderPaint();
     }
 
-    private void updateSliderPaint() {
-        int fromColor = 0xFFFFFFFF;
-        int toColor = currentColorPaint.getColor() | 0xFF000000;
-        sliderPaint.setShader(new LinearGradient(0, 0, 0, canvasHeight, fromColor, toColor, Shader.TileMode.CLAMP));
-    }
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -108,7 +102,6 @@ public class ColorChooserView extends View {
         float degrees = (sweepNumber * 360 + 90) % 360;
         int color = toHSV(degrees);
         updateColor(color);
-        invalidate();
         return true;
     }
 
@@ -118,6 +111,13 @@ public class ColorChooserView extends View {
         if (onColorChangeListener != null) {
             onColorChangeListener.onColor(this, color);
         }
+        invalidate();
+    }
+
+    private void updateSliderPaint() {
+        int fromColor = 0xFFFFFFFF;
+        int toColor = currentColorPaint.getColor() | 0xFF000000;
+        sliderPaint.setShader(new LinearGradient(0, 0, 0, canvasHeight, fromColor, toColor, Shader.TileMode.CLAMP));
     }
 
     private int toHSV(float degrees) {

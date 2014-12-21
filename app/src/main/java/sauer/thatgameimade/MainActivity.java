@@ -12,7 +12,6 @@ public class MainActivity extends Activity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private MyView myView;
     private PixelGridView pixelGridView;
-    private AdvancedBitmap spriteBitmap;
     private ColorChooserView colorChooserView;
 
     @Override
@@ -21,13 +20,18 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         myView = (MyView) findViewById(R.id.myView);
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.face).copy(Bitmap.Config.ARGB_8888, true);
-        spriteBitmap = new AdvancedBitmap(bitmap);
+        Bitmap spriteBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.face).copy(Bitmap.Config.ARGB_8888, true);
         pixelGridView = (PixelGridView) findViewById(R.id.pixelGridView);
 
-        pixelGridView.setMainActivity(this);
-        myView.setAdvancedBitmap(spriteBitmap);
-        pixelGridView.setAdvancedBitmap(spriteBitmap);
+        myView.setSpriteBitmap(spriteBitmap);
+        pixelGridView.setSpriteBitmap(spriteBitmap);
+        pixelGridView.setOnBitmapChangedListener(new PixelGridView.OnBitmapChangedListener() {
+            @Override
+            public void bitMapChanged(View view, Bitmap bitmap) {
+                pixelGridView.invalidate();
+                myView.invalidate();
+            }
+        });
 
         colorChooserView = (ColorChooserView) findViewById(R.id.colorChooserView);
         colorChooserView.setOnColorChangeListener(new ColorChooserView.OnColorChangeListener() {
@@ -47,12 +51,6 @@ public class MainActivity extends Activity {
     private void hideSystemControls() {
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(VISIBILITY_FLAGS);
-    }
-
-    public void invalidateViews() {
-        pixelGridView.invalidate();
-        myView.invalidate();
-        colorChooserView.invalidate();
     }
 
 }

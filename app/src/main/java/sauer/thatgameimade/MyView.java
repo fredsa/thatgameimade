@@ -26,7 +26,7 @@ public class MyView extends View {
     private float touchMajor;
 
     private Bitmap cakeBitmap;
-    private AdvancedBitmap spriteBitmap;
+    private Bitmap spriteBitmap;
     private Bitmap foursquareBitmap;
 
     {
@@ -79,9 +79,8 @@ public class MyView extends View {
 
 //        paintTestFoursquare(canvas);
 
-        Bitmap currentBitmap = spriteBitmap.getCurrentBitmap();
-        paintBitmaps(canvas, currentBitmap);
-        paintSpriteWhenTouched(canvas, currentBitmap);
+        paintBitmaps(canvas, spriteBitmap);
+        paintSpriteWhenTouched(canvas, spriteBitmap);
         paintDotWhenTouched(canvas);
     }
 
@@ -147,7 +146,7 @@ public class MyView extends View {
         invalidate();
     }
 
-    public void setAdvancedBitmap(AdvancedBitmap spriteBitmap) {
+    public void setSpriteBitmap(Bitmap spriteBitmap) {
         this.spriteBitmap = spriteBitmap;
     }
 
