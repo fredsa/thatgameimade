@@ -27,7 +27,6 @@ public class LevelEditorView extends View {
 
     private Bitmap cakeBitmap;
     private Bitmap spriteBitmap;
-    private Bitmap foursquareBitmap;
 
     {
         bgPaint = new Paint();
@@ -39,9 +38,6 @@ public class LevelEditorView extends View {
         touchPaint.setColor(Color.argb(200, 200, 200, 200));
 
         cakeBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.cake_half_alt);
-
-        foursquareBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.foursquare);
-        foursquareBitmap = Bitmap.createScaledBitmap(foursquareBitmap, foursquareBitmap.getWidth() * 50, foursquareBitmap.getHeight() * 50, true);
     }
 
     private int canvasWidth;
