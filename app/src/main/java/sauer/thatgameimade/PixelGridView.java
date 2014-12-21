@@ -48,17 +48,8 @@ public class PixelGridView extends View {
     private int drawingColor;
     private int shortSide;
 
-
-    public PixelGridView(Context context) {
-        super(context);
-    }
-
     public PixelGridView(Context context, AttributeSet attrs) {
         super(context, attrs);
-    }
-
-    public PixelGridView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
     }
 
     @Override

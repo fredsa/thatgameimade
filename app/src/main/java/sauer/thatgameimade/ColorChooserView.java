@@ -1,6 +1,5 @@
 package sauer.thatgameimade;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -8,9 +7,8 @@ import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Shader;
 import android.graphics.SweepGradient;
-import android.os.Build;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -38,21 +36,8 @@ public class ColorChooserView extends View {
 
     private float[] hsvFloats = new float[]{0f, 1f, 1f};
 
-    public ColorChooserView(Context context) {
-        super(context);
-    }
-
     public ColorChooserView(Context context, AttributeSet attrs) {
         super(context, attrs);
-    }
-
-    public ColorChooserView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public ColorChooserView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
     }
 
     private MainActivity mainActivity;
@@ -89,7 +74,7 @@ public class ColorChooserView extends View {
     }
 
     private void updateSliderPaint() {
-        int fromColor = currentColorPaint.getColor() | 0xFFFFFFFF;
+        int fromColor = 0xFFFFFFFF;
         int toColor = currentColorPaint.getColor() | 0xFF000000;
         sliderPaint.setShader(new LinearGradient(0, 0, 0, canvasHeight, fromColor, toColor, Shader.TileMode.CLAMP));
     }
@@ -111,7 +96,7 @@ public class ColorChooserView extends View {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
         float deltaX = event.getX() - shortSide / 2;
         float deltaY = -(event.getY() - shortSide / 2);
         double radians = Math.atan2(deltaY, deltaX); // range: [-Math.PI, Math.PI]
