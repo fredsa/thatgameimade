@@ -6,6 +6,7 @@ import android.util.Log;
 import java.util.Date;
 
 public class MyApplication extends Application{
+    @SuppressWarnings("unused")
     private static final String TAG = MyApplication.class.getSimpleName();
 
     @Override

@@ -17,9 +17,10 @@ import android.view.View;
 
 public class SpriteEditorView extends View {
 
+    @SuppressWarnings("unused")
     private static final String TAG = SpriteEditorView.class.getSimpleName();
-    private Bitmap spriteBitmap;
 
+    private Bitmap spriteBitmap;
     private final Paint bgPaint;
     private final Paint spritePaint;
     private float scale;

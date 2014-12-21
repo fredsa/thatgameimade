@@ -9,8 +9,9 @@ import android.view.View;
 
 public class MainActivity extends Activity {
 
-    public static final int VISIBILITY_FLAGS = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+    @SuppressWarnings("unused")
     private static final String TAG = MainActivity.class.getSimpleName();
+    public static final int VISIBILITY_FLAGS = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
     private LevelEditorView levelEditorView;
     private SpriteEditorView spriteEditorView;
     private ColorPickerView colorPickerView;

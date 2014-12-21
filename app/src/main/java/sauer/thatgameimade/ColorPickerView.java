@@ -14,6 +14,7 @@ import android.view.View;
 
 public class ColorPickerView extends View {
 
+    @SuppressWarnings("unused")
     private String TAG = ColorPickerView.class.getSimpleName();
 
     public static final int[] COLORS = new int[]{

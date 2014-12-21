@@ -13,8 +13,10 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public class LevelEditorView extends View {
-    private static final int SPRITE_SIZE = 8;
+
+    @SuppressWarnings("unused")
     private static final String TAG = LevelEditorView.class.getSimpleName();
+
     public static final float SCALE = 1f;
 
     private final Paint bgPaint;
