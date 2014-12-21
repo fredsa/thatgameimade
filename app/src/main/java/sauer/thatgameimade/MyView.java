@@ -90,7 +90,7 @@ public class MyView extends View {
     }
 
     private void paintSpriteWhenTouched(Canvas canvas, Bitmap bitmap) {
-        if (touchX >= SPRITE_SIZE * blockSize || touchY >= SPRITE_SIZE * blockSize) {
+        if (touchMajor>0) {
             drawMatrix.reset();
             drawMatrix.postTranslate(-bitmap.getWidth() / 2, -bitmap.getHeight() / 2);
             drawMatrix.postScale(50, 50);
