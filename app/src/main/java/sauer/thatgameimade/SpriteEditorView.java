@@ -15,9 +15,9 @@ import android.view.MotionEvent;
 import android.view.View;
 
 
-public class PixelGridView extends View {
+public class SpriteEditorView extends View {
 
-    private static final String TAG = PixelGridView.class.getSimpleName();
+    private static final String TAG = SpriteEditorView.class.getSimpleName();
     private Bitmap spriteBitmap;
 
     private final Paint bgPaint;
@@ -49,7 +49,7 @@ public class PixelGridView extends View {
     private int drawingColor;
     private int shortSide;
 
-    public PixelGridView(Context context, AttributeSet attrs) {
+    public SpriteEditorView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 

@@ -12,9 +12,9 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class ColorChooserView extends View {
+public class ColorPickerView extends View {
 
-    private String TAG = ColorChooserView.class.getSimpleName();
+    private String TAG = ColorPickerView.class.getSimpleName();
 
     public static final int[] COLORS = new int[]{
             Color.RED,
@@ -37,7 +37,7 @@ public class ColorChooserView extends View {
     private float[] hsvFloats = new float[]{0f, 1f, 1f};
     private OnColorChangeListener onColorChangeListener;
 
-    public ColorChooserView(Context context, AttributeSet attrs) {
+    public ColorPickerView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 

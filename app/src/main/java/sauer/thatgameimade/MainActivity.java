@@ -11,9 +11,9 @@ public class MainActivity extends Activity {
 
     public static final int VISIBILITY_FLAGS = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
     private static final String TAG = MainActivity.class.getSimpleName();
-    private MyView myView;
-    private PixelGridView pixelGridView;
-    private ColorChooserView colorChooserView;
+    private LevelEditorView levelEditorView;
+    private SpriteEditorView spriteEditorView;
+    private ColorPickerView colorPickerView;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -29,21 +29,21 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        myView = (MyView) findViewById(R.id.myView);
+        levelEditorView = (LevelEditorView) findViewById(R.id.myView);
 
-        pixelGridView = (PixelGridView) findViewById(R.id.pixelGridView);
-        pixelGridView.setOnBitmapChangedListener(new PixelGridView.OnBitmapChangedListener() {
+        spriteEditorView = (SpriteEditorView) findViewById(R.id.pixelGridView);
+        spriteEditorView.setOnBitmapChangedListener(new SpriteEditorView.OnBitmapChangedListener() {
             @Override
             public void bitMapChanged(View view, Bitmap bitmap) {
                 invalidateBitmapViews();
             }
         });
 
-        colorChooserView = (ColorChooserView) findViewById(R.id.colorChooserView);
-        colorChooserView.setOnColorChangeListener(new ColorChooserView.OnColorChangeListener() {
+        colorPickerView = (ColorPickerView) findViewById(R.id.colorChooserView);
+        colorPickerView.setOnColorChangeListener(new ColorPickerView.OnColorChangeListener() {
             @Override
             public void onColor(View v, int color) {
-                pixelGridView.setDrawingColor(color);
+                spriteEditorView.setDrawingColor(color);
             }
         });
 
@@ -51,14 +51,14 @@ public class MainActivity extends Activity {
     }
 
     private void invalidateBitmapViews() {
-        pixelGridView.invalidate();
-        myView.invalidate();
+        spriteEditorView.invalidate();
+        levelEditorView.invalidate();
     }
 
     private void loadBitmap() {
         Bitmap spriteBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.face).copy(Bitmap.Config.ARGB_8888, true);
-        myView.setSpriteBitmap(spriteBitmap);
-        pixelGridView.setSpriteBitmap(spriteBitmap);
+        levelEditorView.setSpriteBitmap(spriteBitmap);
+        spriteEditorView.setSpriteBitmap(spriteBitmap);
         invalidateBitmapViews();
     }
 

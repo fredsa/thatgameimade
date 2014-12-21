@@ -11,13 +11,13 @@
         android:layout_height="fill_parent"
         android:orientation="vertical">
 
-        <sauer.thatgameimade.PixelGridView
+        <sauer.thatgameimade.SpriteEditorView
             android:id="@+id/pixelGridView"
             android:layout_weight="2"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" />
 
-        <sauer.thatgameimade.ColorChooserView
+        <sauer.thatgameimade.ColorPickerView
             android:id="@+id/colorChooserView"
             android:layout_weight="3"
             android:layout_width="fill_parent"
@@ -31,7 +31,7 @@
         android:layout_height="fill_parent"
         android:orientation="vertical">
 
-        <sauer.thatgameimade.MyView
+        <sauer.thatgameimade.LevelEditorView
             android:id="@+id/myView"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" />

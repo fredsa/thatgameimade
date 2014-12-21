@@ -12,9 +12,9 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class MyView extends View {
+public class LevelEditorView extends View {
     private static final int SPRITE_SIZE = 8;
-    private static final String TAG = MyView.class.getSimpleName();
+    private static final String TAG = LevelEditorView.class.getSimpleName();
     public static final float SCALE = 1f;
 
     private final Paint bgPaint;
@@ -47,15 +47,14 @@ public class MyView extends View {
     private int canvasWidth;
     private int canvasHeight;
     private float halfway;
-    private float blockSize;
     private Matrix drawMatrix = new Matrix();
 
 
-    public MyView(Context context, AttributeSet attrs) {
+    public LevelEditorView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public MyView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public LevelEditorView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -64,7 +63,6 @@ public class MyView extends View {
         canvasWidth = weight;
         canvasHeight = height;
         halfway = Math.min(canvasWidth, canvasHeight) / 2;
-        blockSize = halfway / SPRITE_SIZE;
     }
 
     @Override
@@ -77,8 +75,6 @@ public class MyView extends View {
             return;
         }
 
-//        paintTestFoursquare(canvas);
-
         paintBitmaps(canvas, spriteBitmap);
         paintSpriteWhenTouched(canvas, spriteBitmap);
         paintDotWhenTouched(canvas);
@@ -89,7 +85,7 @@ public class MyView extends View {
     }
 
     private void paintSpriteWhenTouched(Canvas canvas, Bitmap bitmap) {
-        if (touchMajor>0) {
+        if (touchMajor > 0) {
             drawMatrix.reset();
             drawMatrix.postTranslate(-bitmap.getWidth() / 2, -bitmap.getHeight() / 2);
             drawMatrix.postScale(50, 50);
@@ -120,14 +116,6 @@ public class MyView extends View {
                 canvas.drawBitmap(bitmap, drawMatrix, bitmapPaint);
             }
         }
-    }
-
-    private void paintTestFoursquare(Canvas canvas) {
-        drawMatrix.reset();
-        float ratio = halfway / foursquareBitmap.getWidth();
-        drawMatrix.postScale(ratio, ratio);
-        drawMatrix.postTranslate(0, halfway);
-        canvas.drawBitmap(foursquareBitmap, drawMatrix, bitmapPaint);
     }
 
     @Override
