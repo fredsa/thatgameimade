@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Shader;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -22,7 +23,6 @@ public class LevelEditorView extends View {
     private static final String TAG = LevelEditorView.class.getSimpleName();
 
     private Bitmap backgroundBitmap;
-    private Bitmap iceBlockBitmap;
     private Bitmap spriteBitmap;
 
     private BitmapShader backgroundShader;
@@ -41,6 +41,10 @@ public class LevelEditorView extends View {
     private Matrix backgroundMatrix = new Matrix();
     private Matrix drawMatrix = new Matrix();
 
+    private
+    @DrawableRes
+    int[][] blocks;
+
     public LevelEditorView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
@@ -52,14 +56,18 @@ public class LevelEditorView extends View {
     }
 
     private void init(Context context) {
+        blocks = new int[][]{
+                {R.drawable.icepack_cane_green, R.drawable.icepack_cane_red,},
+                {R.drawable.icepack_cane_red_small, R.drawable.icepack_spikes_top_alt,},
+                {R.drawable.icepack_igloo_door, R.drawable.icepack_tree_trunk_branch_left_alt,},
+                {R.drawable.icepack_ice_water_mid_alt, R.drawable.icepack_snow_ball_big,},
+        };
         backgroundBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg_desert);
 
         backgroundShader = new BitmapShader(backgroundBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
 
         backgroundPaint = new Paint();
         backgroundPaint.setShader(backgroundShader);
-
-        iceBlockBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.icepack_ice_block);
 
         bitmapPaint = new Paint();
 
@@ -83,7 +91,7 @@ public class LevelEditorView extends View {
         canvas.drawRect(0, 0, canvasWidth, canvasHeight, backgroundPaint);
 
         if (spriteBitmap != null) {
-            paintBitmaps(canvas, spriteBitmap);
+            paintBitmaps(canvas);
             paintSpriteWhenTouched(canvas, spriteBitmap);
         }
         paintDotWhenTouched(canvas);
@@ -106,23 +114,21 @@ public class LevelEditorView extends View {
         }
     }
 
-    private void paintBitmaps(Canvas canvas, Bitmap bitmap) {
-        bitmapPaint.setColor(Color.rgb(255, 255, 100));
-        float ratio = SCALE * iceBlockBitmap.getWidth() / bitmap.getWidth();
-        int rows = 2;
-        int cols = 5;
-        float y2 = rows * SCALE * iceBlockBitmap.getHeight();
-        for (int i = 0; i < cols; i++) {
-            for (int j = 0; j < rows; j++) {
-                drawMatrix.reset();
-                drawMatrix.postScale(SCALE, SCALE);
-                drawMatrix.postTranslate(i * SCALE * iceBlockBitmap.getWidth(), j * SCALE * iceBlockBitmap.getHeight());
-                canvas.drawBitmap(iceBlockBitmap, drawMatrix, bitmapPaint);
+    private void paintBitmaps(Canvas canvas) {
+        // determine draw matrix based on first block
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), blocks[0][0]);
+        float ratio = SCALE * bitmap.getWidth() / bitmap.getWidth();
+        drawMatrix.reset();
+        drawMatrix.setScale(SCALE, SCALE);
 
-                drawMatrix.reset();
-                drawMatrix.postScale(ratio, ratio);
-                drawMatrix.postTranslate(i * ratio * bitmap.getWidth(), y2 + j * ratio * bitmap.getHeight());
+        bitmapPaint.setColor(Color.rgb(255, 255, 100));
+        int rows = blocks.length;
+        int cols = blocks[0].length;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                bitmap = BitmapFactory.decodeResource(getResources(), blocks[i][j]);
                 canvas.drawBitmap(bitmap, drawMatrix, bitmapPaint);
+                drawMatrix.setTranslate(i * SCALE * bitmap.getWidth(), j * SCALE * bitmap.getHeight());
             }
         }
     }
