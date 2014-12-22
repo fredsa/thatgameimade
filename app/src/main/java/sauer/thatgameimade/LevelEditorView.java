@@ -3,10 +3,12 @@ package sauer.thatgameimade;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Shader;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -17,67 +19,72 @@ public class LevelEditorView extends View {
     public static final float SCALE = 1f;
     @SuppressWarnings("unused")
     private static final String TAG = LevelEditorView.class.getSimpleName();
-    private final Paint bgPaint;
-    private final Paint touchPaint;
-    private final Paint bitmapPaint;
+    private Bitmap backgroundBitmap;
+    private Bitmap iceBlockBitmap;
+    private Bitmap spriteBitmap;
+
+    private BitmapShader backgroundShader;
+
+    private Paint backgroundPaint;
+    private Paint bitmapPaint;
+    private Paint touchPaint;
 
     private float touchX;
     private float touchY;
     private float touchMajor;
 
-    private Bitmap iceBlockBitmap;
-    private Bitmap spriteBitmap;
+    private int canvasWidth;
+    private int canvasHeight;
 
-    {
-        bgPaint = new Paint();
-        bgPaint.setColor(Color.rgb(200, 255, 200));
+    private Matrix backgroundMatrix = new Matrix();
+    private Matrix drawMatrix = new Matrix();
+
+    public LevelEditorView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(context);
+    }
+
+    public LevelEditorView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context);
+    }
+
+    private void init(Context context) {
+        backgroundBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg_desert);
+
+        backgroundShader = new BitmapShader(backgroundBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+
+        backgroundPaint = new Paint();
+        backgroundPaint.setShader(backgroundShader);
+
+        iceBlockBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.icepack_ice_block);
 
         bitmapPaint = new Paint();
 
         touchPaint = new Paint();
         touchPaint.setColor(Color.argb(200, 200, 200, 200));
-
-        iceBlockBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.icepack_ice_block);
-    }
-
-    private int canvasWidth;
-    private int canvasHeight;
-    private Matrix drawMatrix = new Matrix();
-
-
-    public LevelEditorView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public LevelEditorView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
     }
 
     @Override
     protected void onSizeChanged(int weight, int height, int oldWidth, int oldHeight) {
         canvasWidth = weight;
         canvasHeight = height;
+
+        backgroundMatrix.setScale(canvasWidth / backgroundBitmap.getWidth(), canvasHeight / backgroundBitmap.getHeight());
+        backgroundShader.setLocalMatrix(backgroundMatrix);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        paintBackground(canvas);
-
-//        if (isInEditMode()) {
-//            return;
-//        }
+        canvas.drawRect(0, 0, canvasWidth, canvasHeight, backgroundPaint);
 
         if (spriteBitmap != null) {
             paintBitmaps(canvas, spriteBitmap);
             paintSpriteWhenTouched(canvas, spriteBitmap);
         }
         paintDotWhenTouched(canvas);
-    }
-
-    private void paintBackground(Canvas canvas) {
-        canvas.drawRect(0, 0, canvasWidth, canvasHeight, bgPaint);
     }
 
     private void paintSpriteWhenTouched(Canvas canvas, Bitmap bitmap) {

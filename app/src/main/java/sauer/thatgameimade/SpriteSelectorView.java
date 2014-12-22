@@ -19,14 +19,11 @@ public class SpriteSelectorView extends ScrollView {
 
     public SpriteSelectorView(Context context, AttributeSet attrs) {
         super(context, attrs);
-//        if (isInEditMode()) {
-//            return;
-//        }
         init(context);
     }
 
     private void init(Context context) {
-        SPRITES = new ArrayList<SpriteInfo>();
+        SPRITES = new ArrayList<>();
         SPRITES.add(makeBitmap(R.drawable.my_face));
         SPRITES.add(makeBitmap(R.drawable.my_foursquare));
         SPRITES.add(makeBitmap(R.drawable.icepack_cane_green));
@@ -58,9 +55,9 @@ public class SpriteSelectorView extends ScrollView {
         });
     }
 
-    private SpriteInfo makeBitmap(@DrawableRes int resid) {
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), resid).copy(Bitmap.Config.ARGB_8888, true);
-        String name = getResources().getResourceEntryName(resid);
+    private SpriteInfo makeBitmap(@DrawableRes int resourceId) {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), resourceId).copy(Bitmap.Config.ARGB_8888, true);
+        String name = isInEditMode() ? "" + resourceId : getResources().getResourceEntryName(resourceId);
         return new SpriteInfo(name, bitmap);
     }
 
