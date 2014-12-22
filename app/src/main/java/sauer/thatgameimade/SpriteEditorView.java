@@ -110,6 +110,7 @@ public class SpriteEditorView extends View {
         float newX = x / scale;
         float newY = y / scale;
         canvas.drawLine(lastX, lastY, newX, newY, brushPaint);
+        canvas.drawPoint(newX, newY, brushPaint); // when pixels are scaled up
         lastX = newX;
         lastY = newY;
     }
