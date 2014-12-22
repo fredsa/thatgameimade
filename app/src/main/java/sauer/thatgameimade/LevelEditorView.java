@@ -17,8 +17,10 @@ import android.view.View;
 public class LevelEditorView extends View {
 
     public static final float SCALE = 1f;
+
     @SuppressWarnings("unused")
     private static final String TAG = LevelEditorView.class.getSimpleName();
+
     private Bitmap backgroundBitmap;
     private Bitmap iceBlockBitmap;
     private Bitmap spriteBitmap;
@@ -62,7 +64,7 @@ public class LevelEditorView extends View {
         bitmapPaint = new Paint();
 
         touchPaint = new Paint();
-        touchPaint.setColor(Color.argb(200, 200, 200, 200));
+        touchPaint.setColor(Color.argb(75, 255, 255, 255));
     }
 
     @Override
