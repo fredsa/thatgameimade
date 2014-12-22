@@ -10,7 +10,6 @@ import android.graphics.Paint;
 import android.graphics.Shader;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -19,16 +18,11 @@ public class SpriteEditorView extends View {
 
     @SuppressWarnings("unused")
     private static final String TAG = SpriteEditorView.class.getSimpleName();
-    private final Paint bgPaint;
-    private final Paint spritePaint;
+
+    private Paint backgroundPaint;
+    private Paint spritePaint;
     private Bitmap spriteBitmap;
     private float scale;
-
-    {
-        bgPaint = makeBgPaint();
-        spritePaint = new Paint();
-    }
-
     private OnBitmapChangedListener onBitmapChangedListener;
     private int canvasWidth;
     private int canvasHeight;
@@ -41,6 +35,12 @@ public class SpriteEditorView extends View {
 
     public SpriteEditorView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
+    }
+
+    private void init() {
+        backgroundPaint = makeBgPaint();
+        spritePaint = new Paint();
     }
 
     private Paint makeBgPaint() {
@@ -76,20 +76,11 @@ public class SpriteEditorView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-
-//        if (shortSide == 0 || isInEditMode()) {
-//            return;
-//        }
-
-        // draw background
-        canvas.drawRect(0, 0, shortSide, shortSide, bgPaint);
-
         if (spriteBitmap == null) {
-            Log.w(TAG, "bitmap not set");
             return;
         }
 
+        canvas.drawRect(0, 0, shortSide, shortSide, backgroundPaint);
         canvas.drawBitmap(spriteBitmap, drawMatrix, spritePaint);
     }
 
