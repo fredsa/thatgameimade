@@ -27,12 +27,21 @@ public class SpriteSelectorView extends ScrollView {
 
     private void init(Context context) {
         SPRITES = new ArrayList<SpriteInfo>();
-        for (int i = 0; i < 2; i++) {
-            SPRITES.add(makeBitmap("Kenny Game", R.drawable.my_kenny_game));
-            SPRITES.add(makeBitmap("Smiley my_face", R.drawable.my_face));
-            SPRITES.add(makeBitmap("Cake", R.drawable.my_cake_half_alt));
-            SPRITES.add(makeBitmap("Foursquare", R.drawable.my_foursquare));
-        }
+        SPRITES.add(makeBitmap(R.drawable.my_face));
+        SPRITES.add(makeBitmap(R.drawable.my_foursquare));
+        SPRITES.add(makeBitmap(R.drawable.icepack_cane_green));
+        SPRITES.add(makeBitmap(R.drawable.icepack_cane_green_top));
+        SPRITES.add(makeBitmap(R.drawable.icepack_pine_sapling));
+        SPRITES.add(makeBitmap(R.drawable.icepack_ice_water));
+        SPRITES.add(makeBitmap(R.drawable.icepack_ice_water_mid));
+        SPRITES.add(makeBitmap(R.drawable.icepack_ice_water_deep));
+        SPRITES.add(makeBitmap(R.drawable.icepack_ice_block));
+        SPRITES.add(makeBitmap(R.drawable.icepack_rock));
+        SPRITES.add(makeBitmap(R.drawable.icepack_plant));
+        SPRITES.add(makeBitmap(R.drawable.icepack_spikes_bottom));
+        SPRITES.add(makeBitmap(R.drawable.icepack_tundra_left));
+        SPRITES.add(makeBitmap(R.drawable.icepack_tundra_mid));
+        SPRITES.add(makeBitmap(R.drawable.icepack_tundra_right));
 
         View.inflate(context, R.layout.spite_selector_view, this);
         final SpriteArrayAdapter adapter = new SpriteArrayAdapter(context, R.layout.sprite_list_item, SPRITES);
@@ -49,8 +58,9 @@ public class SpriteSelectorView extends ScrollView {
         });
     }
 
-    private SpriteInfo makeBitmap(String name, @DrawableRes int drawable) {
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), drawable).copy(Bitmap.Config.ARGB_8888, true);
+    private SpriteInfo makeBitmap(@DrawableRes int resid) {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), resid).copy(Bitmap.Config.ARGB_8888, true);
+        String name = getResources().getResourceEntryName(resid);
         return new SpriteInfo(name, bitmap);
     }
 

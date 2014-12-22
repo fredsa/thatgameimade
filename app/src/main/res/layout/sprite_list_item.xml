@@ -9,14 +9,12 @@
         android:id="@+id/spriteImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:src="@drawable/my_cake_half_alt" />
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/spriteNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="3"
-        android:text="Name of this sprite"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 </LinearLayout>

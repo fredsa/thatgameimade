@@ -25,7 +25,7 @@ public class LevelEditorView extends View {
     private float touchY;
     private float touchMajor;
 
-    private Bitmap cakeBitmap;
+    private Bitmap iceBlockBitmap;
     private Bitmap spriteBitmap;
 
     {
@@ -37,7 +37,7 @@ public class LevelEditorView extends View {
         touchPaint = new Paint();
         touchPaint.setColor(Color.argb(200, 200, 200, 200));
 
-        cakeBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.my_cake_half_alt);
+        iceBlockBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.icepack_ice_block);
     }
 
     private int canvasWidth;
@@ -99,16 +99,16 @@ public class LevelEditorView extends View {
 
     private void paintBitmaps(Canvas canvas, Bitmap bitmap) {
         bitmapPaint.setColor(Color.rgb(255, 255, 100));
-        float ratio = SCALE * cakeBitmap.getWidth() / bitmap.getWidth();
+        float ratio = SCALE * iceBlockBitmap.getWidth() / bitmap.getWidth();
         int rows = 2;
         int cols = 5;
-        float y2 = rows * SCALE * cakeBitmap.getHeight();
+        float y2 = rows * SCALE * iceBlockBitmap.getHeight();
         for (int i = 0; i < cols; i++) {
             for (int j = 0; j < rows; j++) {
                 drawMatrix.reset();
                 drawMatrix.postScale(SCALE, SCALE);
-                drawMatrix.postTranslate(i * SCALE * cakeBitmap.getWidth(), j * SCALE * cakeBitmap.getHeight());
-                canvas.drawBitmap(cakeBitmap, drawMatrix, bitmapPaint);
+                drawMatrix.postTranslate(i * SCALE * iceBlockBitmap.getWidth(), j * SCALE * iceBlockBitmap.getHeight());
+                canvas.drawBitmap(iceBlockBitmap, drawMatrix, bitmapPaint);
 
                 drawMatrix.reset();
                 drawMatrix.postScale(ratio, ratio);
