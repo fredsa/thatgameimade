@@ -28,10 +28,10 @@ public class SpriteSelectorView extends ScrollView {
     private void init(Context context) {
         SPRITES = new ArrayList<SpriteInfo>();
         for (int i = 0; i < 2; i++) {
-            SPRITES.add(makeBitmap("Kenny Game", R.drawable.kenny_game));
-            SPRITES.add(makeBitmap("Smiley face", R.drawable.face));
-            SPRITES.add(makeBitmap("Cake", R.drawable.cake_half_alt));
-            SPRITES.add(makeBitmap("Foursquare", R.drawable.foursquare));
+            SPRITES.add(makeBitmap("Kenny Game", R.drawable.my_kenny_game));
+            SPRITES.add(makeBitmap("Smiley my_face", R.drawable.my_face));
+            SPRITES.add(makeBitmap("Cake", R.drawable.my_cake_half_alt));
+            SPRITES.add(makeBitmap("Foursquare", R.drawable.my_foursquare));
         }
 
         View.inflate(context, R.layout.spite_selector_view, this);

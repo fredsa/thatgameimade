@@ -37,7 +37,7 @@ public class LevelEditorView extends View {
         touchPaint = new Paint();
         touchPaint.setColor(Color.argb(200, 200, 200, 200));
 
-        cakeBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.cake_half_alt);
+        cakeBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.my_cake_half_alt);
     }
 
     private int canvasWidth;

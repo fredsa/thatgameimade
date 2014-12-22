@@ -53,6 +53,7 @@ public class ColorPickerView extends View {
 
         brushPaint = new Paint();
         brushPaint.setColor(Color.WHITE);
+        brushPaint.setStrokeWidth(1f);
     }
 
     public ColorPickerView(Context context, AttributeSet attrs) {

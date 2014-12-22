@@ -67,7 +67,7 @@ public class MainActivity extends Activity {
     }
 
     private void loadBitmap() {
-        Bitmap spriteBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.face).copy(Bitmap.Config.ARGB_8888, true);
+        Bitmap spriteBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.my_face).copy(Bitmap.Config.ARGB_8888, true);
         setBitmap(spriteBitmap);
     }
 

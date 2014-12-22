@@ -47,7 +47,7 @@ public class SpriteEditorView extends View {
         Paint bgPaint;
         Bitmap bgBitmap;
         BitmapShader bgShader;
-        bgBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.checker_gray);
+        bgBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.my_checker_gray);
         bgBitmap = Bitmap.createScaledBitmap(bgBitmap, bgBitmap.getWidth() * 16, bgBitmap.getHeight() * 16, false);
         bgShader = new BitmapShader(bgBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
         bgPaint = new Paint();
