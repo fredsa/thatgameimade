@@ -39,16 +39,13 @@ public class LevelEditorView extends View {
     private float touchY;
     private float touchMajor;
 
-    private float canvasWidth;
-    private float canvasHeight;
-
     private Matrix backgroundMatrix = new Matrix();
     private Matrix drawMatrix = new Matrix();
 
     @DrawableRes
     private Bitmap[][] blocks;
     private ArrayList<Bitmap> bitmapList;
-    private float scale = 1.3f;
+    private float scale = 1.4f;
     private int levelBlocksX;
     private int levelBlocksY;
 
@@ -117,9 +114,6 @@ public class LevelEditorView extends View {
 
     @Override
     protected void onSizeChanged(int weight, int height, int oldWidth, int oldHeight) {
-        canvasWidth = weight;
-        canvasHeight = height;
-
         backgroundMatrix.setScale(scale, scale);
         backgroundShader.setLocalMatrix(backgroundMatrix);
     }
@@ -127,18 +121,10 @@ public class LevelEditorView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
         canvas.drawRect(0, 0, backgroundBitmap.getWidth() * scale, backgroundBitmap.getHeight() * scale, backgroundPaint);
 
         if (spriteBitmap != null) {
             paintBitmaps(canvas);
-        }
-        paintDotWhenTouched(canvas);
-    }
-
-    private void paintDotWhenTouched(Canvas canvas) {
-        if (touchMajor > 0) {
-            canvas.drawCircle(touchX, touchY, touchMajor / 2, touchPaint);
         }
     }
 
