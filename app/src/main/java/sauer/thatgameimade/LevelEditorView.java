@@ -45,11 +45,10 @@ public class LevelEditorView extends View {
     private Matrix backgroundMatrix = new Matrix();
     private Matrix drawMatrix = new Matrix();
 
-    private
     @DrawableRes
-    Bitmap[][] blocks;
+    private Bitmap[][] blocks;
     private ArrayList<Bitmap> bitmapList;
-    private float scale = 1f;
+    private float scale = 1.3f;
     private int levelBlocksX;
     private int levelBlocksY;
 
@@ -129,7 +128,7 @@ public class LevelEditorView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        canvas.drawRect(0, 0, backgroundBitmap.getWidth(), backgroundBitmap.getHeight(), backgroundPaint);
+        canvas.drawRect(0, 0, backgroundBitmap.getWidth() * scale, backgroundBitmap.getHeight() * scale, backgroundPaint);
 
         if (spriteBitmap != null) {
             paintBitmaps(canvas);
