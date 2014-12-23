@@ -48,13 +48,13 @@
             android:id="@+id/myView"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="1" />
+            android:layout_weight="2" />
 
         <sauer.thatgameimade.SpriteSelectorView
             android:id="@+id/spriteSelectorView"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="2"
+            android:layout_weight="3"
             android:fillViewport="true" />
 
     </LinearLayout>

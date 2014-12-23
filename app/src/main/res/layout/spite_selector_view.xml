@@ -8,5 +8,9 @@
     <ListView
         android:id="@+id/spriteListView"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent"
+        android:choiceMode="singleChoice"
+        android:divider="@color/red"
+        android:dividerHeight="1dp"
+        android:drawSelectorOnTop="true" />
 </ScrollView>
