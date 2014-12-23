@@ -1,6 +1,7 @@
 package sauer.thatgameimade;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
@@ -12,16 +13,19 @@ import android.graphics.Shader;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class LevelEditorView extends View {
 
     public static final float SCALE = 1f;
-
+    public static final String PLATFORMER_ART_V_4_PNGS = "platformerArt_v4/png";
     @SuppressWarnings("unused")
     private static final String TAG = LevelEditorView.class.getSimpleName();
-
     private Bitmap backgroundBitmap;
     private Bitmap spriteBitmap;
 
@@ -43,7 +47,8 @@ public class LevelEditorView extends View {
 
     private
     @DrawableRes
-    int[][] blocks;
+    Bitmap[][] blocks;
+    private ArrayList<Bitmap> bitmaps;
 
     public LevelEditorView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -56,12 +61,30 @@ public class LevelEditorView extends View {
     }
 
     private void init(Context context) {
-        blocks = new int[][]{
-                {R.drawable.icepack_cane_green, R.drawable.icepack_cane_red,},
-                {R.drawable.icepack_cane_red_small, R.drawable.icepack_spikes_top_alt,},
-                {R.drawable.icepack_igloo_door, R.drawable.icepack_tree_trunk_branch_left_alt,},
-                {R.drawable.icepack_ice_water_mid_alt, R.drawable.icepack_snow_ball_big,},
-        };
+        AssetManager assetManager = getResources().getAssets();
+        bitmaps = new ArrayList<Bitmap>();
+        try {
+            for (String fileName : assetManager.list(PLATFORMER_ART_V_4_PNGS)) {
+                if (!fileName.endsWith(".png")) {
+                    Log.w(TAG, fileName);
+                    continue;
+                }
+                Bitmap bitmap = BitmapFactory.decodeStream(assetManager.open(PLATFORMER_ART_V_4_PNGS + "/" + fileName));
+                bitmaps.add(bitmap);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to load my game assets");
+        }
+        int cols = Math.max(3, (int) Math.sqrt(bitmaps.size()));
+        int rows = Math.max(3, bitmaps.size() / cols);
+        blocks = new Bitmap[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                int index = (i * cols + j) % bitmaps.size();
+                blocks[i][j] = bitmaps.get(index);
+            }
+        }
+
         backgroundBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg_desert);
 
         backgroundShader = new BitmapShader(backgroundBitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
@@ -116,8 +139,7 @@ public class LevelEditorView extends View {
 
     private void paintBitmaps(Canvas canvas) {
         // determine draw matrix based on first block
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), blocks[0][0]);
-        float ratio = SCALE * bitmap.getWidth() / bitmap.getWidth();
+        float ratio = SCALE * blocks[0][0].getWidth() / blocks[0][0].getWidth();
         drawMatrix.reset();
         drawMatrix.setScale(SCALE, SCALE);
 
@@ -126,9 +148,8 @@ public class LevelEditorView extends View {
         int cols = blocks[0].length;
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                bitmap = BitmapFactory.decodeResource(getResources(), blocks[i][j]);
-                canvas.drawBitmap(bitmap, drawMatrix, bitmapPaint);
-                drawMatrix.setTranslate(i * SCALE * bitmap.getWidth(), j * SCALE * bitmap.getHeight());
+                canvas.drawBitmap(blocks[i][j], drawMatrix, bitmapPaint);
+                drawMatrix.setTranslate(i * SCALE * blocks[i][j].getWidth(), j * SCALE * blocks[i][j].getHeight());
             }
         }
     }
