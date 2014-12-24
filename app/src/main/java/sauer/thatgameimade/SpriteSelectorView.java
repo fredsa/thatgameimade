@@ -4,15 +4,18 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.DrawableRes;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.ScrollView;
 
 import java.util.ArrayList;
 
 public class SpriteSelectorView extends ScrollView {
+
+    @SuppressWarnings("unused")
+    public static final String TAG = SpriteSelectorView.class.getSimpleName();
 
     public ArrayList<SpriteInfo> SPRITES;
     private OnSpriteSelectedListener onSpriteSelectedListener;
@@ -41,18 +44,17 @@ public class SpriteSelectorView extends ScrollView {
         SPRITES.add(makeBitmap(R.drawable.icepack_tundra_right));
 
         View.inflate(context, R.layout.spite_selector_view, this);
-        final SpriteArrayAdapter adapter = new SpriteArrayAdapter(context, R.layout.sprite_list_item, SPRITES);
-        final ListView spritePickerListView = (ListView) findViewById(R.id.spriteListView);
-        spritePickerListView.setAdapter(adapter);
+        final RecyclerView spriteSelectorRecyclerView = (RecyclerView) findViewById(R.id.spriteSelectorRecyclerView);
+        spriteSelectorRecyclerView.setHasFixedSize(true);
+        spriteSelectorRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        spritePickerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        final SpriteRecyclerViewAdapter adapter = new SpriteRecyclerViewAdapter(SPRITES, new SpriteRecyclerViewAdapter.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (onSpriteSelectedListener != null) {
-                    onSpriteSelectedListener.spriteSelected(view, adapter.getItem(position).getBitmap());
-                }
+            public void itemSelected(SpriteInfo spriteInfo) {
+                onSpriteSelectedListener.spriteSelected(spriteInfo.getBitmap());
             }
         });
+        spriteSelectorRecyclerView.setAdapter(adapter);
     }
 
     private SpriteInfo makeBitmap(@DrawableRes int resourceId) {
@@ -66,6 +68,6 @@ public class SpriteSelectorView extends ScrollView {
     }
 
     public interface OnSpriteSelectedListener {
-        void spriteSelected(View view, Bitmap bitmap);
+        void spriteSelected(Bitmap bitmap);
     }
 }
