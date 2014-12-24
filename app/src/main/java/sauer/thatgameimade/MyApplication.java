@@ -14,4 +14,5 @@ public class MyApplication extends Application{
         super.onCreate();
         Log.w(TAG, "=========================== " + new Date());
     }
+
 }
