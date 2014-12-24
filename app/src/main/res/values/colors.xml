@@ -3,6 +3,9 @@
     <color name="blue">#44c</color>
     <color name="green">#4c4</color>
     <color name="red">#c44</color>
-    <color name="purple">#ff4</color>
+
+    <color name="purple">#f4f</color>
+    <color name="yellow">#ff4</color>
+    <color name="cyan">#4ff</color>
 
 </resources>

@@ -43,10 +43,12 @@ public class SpriteSelectorView extends ScrollView {
         SPRITES.add(makeBitmap(R.drawable.icepack_tundra_mid));
         SPRITES.add(makeBitmap(R.drawable.icepack_tundra_right));
 
-        View.inflate(context, R.layout.spite_selector_view, this);
+        View.inflate(context, R.layout.sprite_selector_view, this);
         final RecyclerView spriteSelectorRecyclerView = (RecyclerView) findViewById(R.id.spriteSelectorRecyclerView);
         spriteSelectorRecyclerView.setHasFixedSize(true);
-        spriteSelectorRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        spriteSelectorRecyclerView.setLayoutManager(layoutManager);
 
         final SpriteRecyclerViewAdapter adapter = new SpriteRecyclerViewAdapter(SPRITES, new SpriteRecyclerViewAdapter.OnItemSelectedListener() {
             @Override
