@@ -16,6 +16,7 @@ public class MainActivity extends Activity {
     private LevelEditorView levelEditorView;
     private SpriteEditorView spriteEditorView;
     private ColorPickerView colorPickerView;
+    private LevelHolder levelHolder;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -31,8 +32,11 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        MyApplication myApplication = (MyApplication) getApplication();
+        levelHolder = myApplication.getLevelHolder();
 
         levelEditorView = (LevelEditorView) findViewById(R.id.myView);
+        levelEditorView.setLevelHolder(levelHolder);
 
         spriteEditorView = (SpriteEditorView) findViewById(R.id.pixelGridView);
         spriteEditorView.setOnBitmapChangedListener(new SpriteEditorView.OnBitmapChangedListener() {
@@ -72,7 +76,6 @@ public class MainActivity extends Activity {
     }
 
     private void setBitmap(Bitmap spriteBitmap) {
-        levelEditorView.setSpriteBitmap(spriteBitmap);
         spriteEditorView.setSpriteBitmap(spriteBitmap);
         invalidateBitmapViews();
     }

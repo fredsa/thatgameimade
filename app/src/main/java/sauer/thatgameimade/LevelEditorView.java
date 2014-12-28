@@ -1,32 +1,22 @@
 package sauer.thatgameimade;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Shader;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 public class LevelEditorView extends View {
 
-    public static final String PLATFORMER_ART_V_4_PNGS = "platformerArt_v4/png";
     @SuppressWarnings("unused")
     private static final String TAG = LevelEditorView.class.getSimpleName();
-    private Bitmap backgroundBitmap;
-    private Bitmap spriteBitmap;
     private BitmapShader backgroundShader;
 
     private Paint backgroundPaint;
@@ -39,24 +29,15 @@ public class LevelEditorView extends View {
     private Matrix backgroundMatrix = new Matrix();
     private Matrix drawMatrix = new Matrix();
 
-    private ArrayList<Bitmap> bitmapList;
-    @DrawableRes
-    private Bitmap[][] blocks;
+    private LevelHolder levelHolder;
     private float scale = 1.4f;
-    private int levelBlocksX;
-    private int levelBlocksY;
 
     public LevelEditorView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
     }
 
     private void init() {
-        backgroundBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg_shroom);
-        backgroundShader = new BitmapShader(backgroundBitmap, Shader.TileMode.REPEAT, Shader.TileMode.MIRROR);
-
-        levelBlocksX = (int) Math.floor(backgroundBitmap.getWidth() / R.integer.block_size);
-        levelBlocksY = (int) Math.floor(backgroundBitmap.getHeight() / R.integer.block_size);
+        backgroundShader = new BitmapShader(levelHolder.getBackgroundBitmap(), Shader.TileMode.REPEAT, Shader.TileMode.MIRROR);
 
         backgroundPaint = new Paint();
         backgroundPaint.setShader(backgroundShader);
@@ -65,44 +46,6 @@ public class LevelEditorView extends View {
 
         touchPaint = new Paint();
         touchPaint.setColor(Color.argb(75, 255, 255, 255));
-
-        if (isInEditMode()) {
-            return;
-        }
-        initBitmapAssets();
-        initLevelBlocks();
-    }
-
-    private void initBitmapAssets() {
-        AssetManager assetManager = getResources().getAssets();
-        bitmapList = new ArrayList<>();
-        try {
-            for (String fileName : assetManager.list(PLATFORMER_ART_V_4_PNGS)) {
-                if (!fileName.endsWith(".png")) {
-                    Log.w(TAG, fileName);
-                    continue;
-                }
-                Bitmap bitmap = BitmapFactory.decodeStream(assetManager.open(PLATFORMER_ART_V_4_PNGS + "/" + fileName));
-                if (bitmap.getWidth() > R.integer.block_size || bitmap.getHeight() > R.integer.block_size) {
-                    Log.w(TAG, fileName + " " + bitmap.getWidth() + " x " + bitmap.getHeight());
-                    continue;
-                }
-                bitmapList.add(bitmap);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to load my game assets");
-        }
-    }
-
-
-    private void initLevelBlocks() {
-        blocks = new Bitmap[levelBlocksX][levelBlocksY];
-        for (int i = 0; i < levelBlocksX; i++) {
-            for (int j = 0; j < levelBlocksY; j++) {
-                int index = (i + j * levelBlocksX) % bitmapList.size();
-                blocks[i][j] = bitmapList.get(index);
-            }
-        }
     }
 
     @Override
@@ -114,22 +57,22 @@ public class LevelEditorView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawRect(0, 0, backgroundBitmap.getWidth() * scale, backgroundBitmap.getHeight() * scale, backgroundPaint);
+        canvas.drawRect(0, 0, levelHolder.getBackgroundBitmap().getWidth() * scale, levelHolder.getBackgroundBitmap().getHeight() * scale, backgroundPaint);
 
-        if (spriteBitmap != null) {
+        if (levelHolder != null) {
             paintBitmaps(canvas);
         }
     }
 
     private void paintBitmaps(Canvas canvas) {
-        for (int i = 0; i < levelBlocksX; i++) {
-            for (int j = 0; j < levelBlocksY; j++) {
-                Bitmap bitmap = blocks[i][j];
+        for (int i = 0; i < levelHolder.getLevelBlocksX(); i++) {
+            for (int j = 0; j < levelHolder.getLevelBlocksY(); j++) {
+                Bitmap bitmap = levelHolder.getLevelBlocks()[i][j];
                 if (bitmap == null) {
                     continue;
                 }
                 drawMatrix.reset();
-                drawMatrix.postTranslate(i * R.integer.block_size, j * R.integer.block_size);
+                drawMatrix.postTranslate(i * levelHolder.getBlockSize(), j * levelHolder.getBlockSize());
                 drawMatrix.postScale(scale, scale);
                 canvas.drawBitmap(bitmap, drawMatrix, bitmapPaint);
             }
@@ -141,10 +84,10 @@ public class LevelEditorView extends View {
         if (event.getPointerCount() == 1) {
             this.touchX = event.getX();
             this.touchY = event.getY();
-            int x = (int) (touchX / scale / R.integer.block_size);
-            int y = (int) (touchY / scale / R.integer.block_size);
+            int x = (int) (touchX / scale / levelHolder.getBlockSize());
+            int y = (int) (touchY / scale / levelHolder.getBlockSize());
             try {
-                blocks[x][y] = bitmapList.get((int) (Math.random() * bitmapList.size()));
+                levelHolder.getLevelBlocks()[x][y] = levelHolder.getBitmapList().get((int) (Math.random() * levelHolder.getBitmapList().size()));
             } catch (Exception ignore) {
             }
             invalidate();
@@ -153,8 +96,8 @@ public class LevelEditorView extends View {
         return false;
     }
 
-    public void setSpriteBitmap(Bitmap spriteBitmap) {
-        this.spriteBitmap = spriteBitmap;
+    public void setLevelHolder(LevelHolder levelHolder) {
+        this.levelHolder = levelHolder;
+        init();
     }
-
 }

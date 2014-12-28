@@ -5,14 +5,20 @@ import android.util.Log;
 
 import java.util.Date;
 
-public class MyApplication extends Application{
+public class MyApplication extends Application {
     @SuppressWarnings("unused")
     private static final String TAG = MyApplication.class.getSimpleName();
+
+    private LevelHolder level1;
 
     @Override
     public void onCreate() {
         super.onCreate();
         Log.w(TAG, "=========================== " + new Date());
+        level1 = new LevelHolder(getResources(), "platformerArt_v4/png", R.drawable.bg_shroom);
     }
 
+    public LevelHolder getLevelHolder() {
+        return level1;
+    }
 }
