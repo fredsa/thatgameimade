@@ -96,7 +96,7 @@ public class LevelEditorView extends View {
             int y = (int) (touchY / scale / levelHolder.getBlockSize());
             try {
                 levelHolder.getLevelBlocks()[x][y] = blockInfo;
-            } catch (Exception ignore) {
+            } catch (IndexOutOfBoundsException ignore) {
             }
             invalidate();
             return true;
