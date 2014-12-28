@@ -4,7 +4,6 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.annotation.DrawableRes;
 import android.util.Log;
 
 import java.io.IOException;
@@ -14,44 +13,60 @@ public class LevelHolder {
 
     private static final String TAG = LevelHolder.class.getSimpleName();
     private final int blockSize;
+    private final AssetManager assetManager;
     private ArrayList<Bitmap> bitmapList;
     private Bitmap[][] levelBlocks;
     private Bitmap backgroundBitmap;
     private int levelBlocksX;
     private int levelBlocksY;
 
-    public LevelHolder(Resources resources, String assetDirectory, @DrawableRes int bg_drawable) {
+    public LevelHolder(Resources resources, String assetDirectory, String backgroundFilename) {
+        assetManager = resources.getAssets();
         blockSize = resources.getInteger(R.integer.block_size);
 
-        backgroundBitmap = BitmapFactory.decodeResource(resources, bg_drawable);
+        backgroundBitmap = getBitmap(backgroundFilename);
+
         levelBlocksX = (int) Math.floor(backgroundBitmap.getWidth() / blockSize);
         levelBlocksY = (int) Math.floor(backgroundBitmap.getHeight() / blockSize);
 
-        bitmapList = makeBitmapAssets(resources, assetDirectory);
+        bitmapList = makeBitmapAssets(assetDirectory);
 
         levelBlocks = makeLevelBlocks();
     }
 
-    private ArrayList<Bitmap> makeBitmapAssets(Resources resources, String assetDirectory) {
-        AssetManager assetManager = resources.getAssets();
-        ArrayList<Bitmap> bitmapList = new ArrayList<>();
+    private Bitmap getBitmap(String assetFilename) {
         try {
-            for (String fileName : assetManager.list(assetDirectory)) {
-                if (!fileName.endsWith(".png")) {
-                    Log.w(TAG, fileName);
-                    continue;
-                }
-                Bitmap bitmap = BitmapFactory.decodeStream(assetManager.open(assetDirectory + "/" + fileName));
-                if (bitmap.getWidth() > blockSize || bitmap.getHeight() > blockSize) {
-                    Log.w(TAG, fileName + " " + bitmap.getWidth() + " x " + bitmap.getHeight());
-                    continue;
-                }
-                bitmapList.add(bitmap);
+            return BitmapFactory.decodeStream(assetManager.open(assetFilename));
+        } catch (IOException ignore) {
+            throw new RuntimeException("Unable to load game asset file '" + assetFilename + "'");
+        }
+    }
+
+    private ArrayList<Bitmap> makeBitmapAssets(String assetDirectory) {
+        ArrayList<Bitmap> bitmapList = new ArrayList<>();
+        String[] assets = getAssets(assetDirectory);
+        for (String fileName : assets) {
+            if (!fileName.endsWith(".png")) {
+                Log.w(TAG, fileName);
+                continue;
             }
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to load my game assets");
+            Bitmap bitmap = getBitmap(assetDirectory + "/" + fileName);
+            bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+            if (bitmap.getWidth() > blockSize || bitmap.getHeight() > blockSize) {
+                Log.w(TAG, fileName + " " + bitmap.getWidth() + " x " + bitmap.getHeight());
+                continue;
+            }
+            bitmapList.add(bitmap);
         }
         return bitmapList;
+    }
+
+    private String[] getAssets(String assetDirectory) {
+        try {
+            return assetManager.list(assetDirectory);
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to access asset directory '" + assetDirectory + "'");
+        }
     }
 
     private Bitmap[][] makeLevelBlocks() {

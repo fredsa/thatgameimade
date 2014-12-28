@@ -1,5 +1,6 @@
 package sauer.thatgameimade;
 
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,16 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 public class SpriteRecyclerViewAdapter extends RecyclerView.Adapter<SpriteRecyclerViewAdapter.SpriteViewHolder> {
     @SuppressWarnings("unused")
     private static final String TAG = SpriteRecyclerViewAdapter.class.getSimpleName();
     private final OnItemSelectedListener onItemSelectedListener;
-    private ArrayList<SpriteInfo> sprites;
+    private LevelHolder levelHolder;
 
-    SpriteRecyclerViewAdapter(ArrayList<SpriteInfo> sprites, OnItemSelectedListener onItemSelectedListener) {
-        this.sprites = sprites;
+    SpriteRecyclerViewAdapter(OnItemSelectedListener onItemSelectedListener) {
+        this.levelHolder = levelHolder;
         this.onItemSelectedListener = onItemSelectedListener;
     }
 
@@ -30,24 +29,29 @@ public class SpriteRecyclerViewAdapter extends RecyclerView.Adapter<SpriteRecycl
 
     @Override
     public void onBindViewHolder(SpriteViewHolder spriteViewHolder, int position) {
-        final SpriteInfo spriteInfo = sprites.get(position);
-        spriteViewHolder.spriteNameTextView.setText(spriteInfo.getName());
-        spriteViewHolder.spriteImageView.setImageBitmap(spriteInfo.getBitmap());
+        final Bitmap bitmap = levelHolder.getBitmapList().get(position);
+        spriteViewHolder.spriteNameTextView.setText("foo");
+        spriteViewHolder.spriteImageView.setImageBitmap(bitmap);
         spriteViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemSelectedListener.itemSelected(spriteInfo);
+                onItemSelectedListener.itemSelected(bitmap);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return sprites.size();
+        // TODO avoid conditional
+        return levelHolder == null ? 0 : levelHolder.getBitmapList().size();
+    }
+
+    public void setLevelHolder(LevelHolder levelHolder) {
+        this.levelHolder = levelHolder;
     }
 
     public interface OnItemSelectedListener {
-        void itemSelected(SpriteInfo spriteInfo);
+        void itemSelected(Bitmap bitmap);
     }
 
     public static class SpriteViewHolder extends RecyclerView.ViewHolder {

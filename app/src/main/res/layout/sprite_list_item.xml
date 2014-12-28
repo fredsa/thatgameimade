@@ -9,7 +9,7 @@
         android:id="@+id/spriteImageView"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/icepack_pine_sapling" />
+        android:src="@drawable/my_cake_half_alt" />
 
     <TextView
         android:id="@+id/spriteNameTextView"

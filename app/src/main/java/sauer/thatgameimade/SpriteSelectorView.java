@@ -2,8 +2,6 @@ package sauer.thatgameimade;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.support.annotation.DrawableRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -19,6 +17,8 @@ public class SpriteSelectorView extends ScrollView {
 
     public ArrayList<SpriteInfo> SPRITES;
     private OnSpriteSelectedListener onSpriteSelectedListener;
+    private LevelHolder levelHolder;
+    private SpriteRecyclerViewAdapter spriteRecyclerViewAdapter;
 
     public SpriteSelectorView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -26,23 +26,6 @@ public class SpriteSelectorView extends ScrollView {
     }
 
     private void init(Context context) {
-        SPRITES = new ArrayList<>();
-        SPRITES.add(makeBitmap(R.drawable.my_face));
-        SPRITES.add(makeBitmap(R.drawable.my_foursquare));
-        SPRITES.add(makeBitmap(R.drawable.icepack_cane_green));
-        SPRITES.add(makeBitmap(R.drawable.icepack_cane_green_top));
-        SPRITES.add(makeBitmap(R.drawable.icepack_pine_sapling));
-        SPRITES.add(makeBitmap(R.drawable.icepack_ice_water));
-        SPRITES.add(makeBitmap(R.drawable.icepack_ice_water_mid));
-        SPRITES.add(makeBitmap(R.drawable.icepack_ice_water_deep));
-        SPRITES.add(makeBitmap(R.drawable.icepack_ice_block));
-        SPRITES.add(makeBitmap(R.drawable.icepack_rock));
-        SPRITES.add(makeBitmap(R.drawable.icepack_plant));
-        SPRITES.add(makeBitmap(R.drawable.icepack_spikes_bottom));
-        SPRITES.add(makeBitmap(R.drawable.icepack_tundra_left));
-        SPRITES.add(makeBitmap(R.drawable.icepack_tundra_mid));
-        SPRITES.add(makeBitmap(R.drawable.icepack_tundra_right));
-
         View.inflate(context, R.layout.sprite_selector_view, this);
         final RecyclerView spriteSelectorRecyclerView = (RecyclerView) findViewById(R.id.spriteSelectorRecyclerView);
         spriteSelectorRecyclerView.setHasFixedSize(true);
@@ -50,23 +33,22 @@ public class SpriteSelectorView extends ScrollView {
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         spriteSelectorRecyclerView.setLayoutManager(layoutManager);
 
-        final SpriteRecyclerViewAdapter adapter = new SpriteRecyclerViewAdapter(SPRITES, new SpriteRecyclerViewAdapter.OnItemSelectedListener() {
+        spriteRecyclerViewAdapter = new SpriteRecyclerViewAdapter(new SpriteRecyclerViewAdapter.OnItemSelectedListener() {
             @Override
-            public void itemSelected(SpriteInfo spriteInfo) {
-                onSpriteSelectedListener.spriteSelected(spriteInfo.getBitmap());
+            public void itemSelected(Bitmap bitmap) {
+                onSpriteSelectedListener.spriteSelected(bitmap);
             }
         });
-        spriteSelectorRecyclerView.setAdapter(adapter);
-    }
-
-    private SpriteInfo makeBitmap(@DrawableRes int resourceId) {
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), resourceId).copy(Bitmap.Config.ARGB_8888, true);
-        String name = isInEditMode() ? "" + resourceId : getResources().getResourceEntryName(resourceId);
-        return new SpriteInfo(name, bitmap);
+        spriteSelectorRecyclerView.setAdapter(spriteRecyclerViewAdapter);
     }
 
     public void setOnSpriteSelectedListener(OnSpriteSelectedListener onSpriteSelectedListener) {
         this.onSpriteSelectedListener = onSpriteSelectedListener;
+    }
+
+    public void setLevelHolder(LevelHolder levelHolder) {
+        this.levelHolder = levelHolder;
+        spriteRecyclerViewAdapter.setLevelHolder(levelHolder);
     }
 
     public interface OnSpriteSelectedListener {

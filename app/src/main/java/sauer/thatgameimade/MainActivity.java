@@ -55,6 +55,7 @@ public class MainActivity extends Activity {
         });
 
         SpriteSelectorView spriteSelectorView = (SpriteSelectorView) findViewById(R.id.spriteSelectorView);
+        spriteSelectorView.setLevelHolder(levelHolder);
         spriteSelectorView.setOnSpriteSelectedListener(new SpriteSelectorView.OnSpriteSelectedListener() {
             @Override
             public void spriteSelected(Bitmap bitmap) {
