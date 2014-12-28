@@ -75,6 +75,7 @@ public class MainActivity extends Activity {
 
     private void setBlockInfo(BlockInfo blockInfo) {
         spriteEditorView.setBlockInfo(blockInfo);
+        levelEditorView.setBlockInfo(blockInfo);
         invalidateBitmapViews();
     }
 

@@ -30,6 +30,7 @@ public class LevelEditorView extends View {
 
     private LevelHolder levelHolder;
     private float scale = 1.4f;
+    private BlockInfo blockInfo;
 
     public LevelEditorView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -94,7 +95,7 @@ public class LevelEditorView extends View {
             int x = (int) (touchX / scale / levelHolder.getBlockSize());
             int y = (int) (touchY / scale / levelHolder.getBlockSize());
             try {
-                levelHolder.getLevelBlocks()[x][y] = levelHolder.getBlockList().get((int) (Math.random() * levelHolder.getBlockList().size()));
+                levelHolder.getLevelBlocks()[x][y] = blockInfo;
             } catch (Exception ignore) {
             }
             invalidate();
@@ -106,5 +107,9 @@ public class LevelEditorView extends View {
     public void setLevelHolder(LevelHolder levelHolder) {
         this.levelHolder = levelHolder;
         init();
+    }
+
+    public void setBlockInfo(BlockInfo blockInfo) {
+        this.blockInfo = blockInfo;
     }
 }
