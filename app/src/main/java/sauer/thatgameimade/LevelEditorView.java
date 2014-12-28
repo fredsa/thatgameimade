@@ -1,7 +1,6 @@
 package sauer.thatgameimade;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -50,6 +49,9 @@ public class LevelEditorView extends View {
 
     @Override
     protected void onSizeChanged(int weight, int height, int oldWidth, int oldHeight) {
+        if (isInEditMode()) {
+            return;
+        }
         backgroundMatrix.setScale(scale, scale);
         backgroundShader.setLocalMatrix(backgroundMatrix);
     }
@@ -57,6 +59,10 @@ public class LevelEditorView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        if (isInEditMode()) {
+            return;
+        }
+
         canvas.drawRect(0, 0, levelHolder.getBackgroundBitmap().getWidth() * scale, levelHolder.getBackgroundBitmap().getHeight() * scale, backgroundPaint);
 
         // TODO avoid conditional
@@ -68,14 +74,14 @@ public class LevelEditorView extends View {
     private void paintBitmaps(Canvas canvas) {
         for (int i = 0; i < levelHolder.getLevelBlocksX(); i++) {
             for (int j = 0; j < levelHolder.getLevelBlocksY(); j++) {
-                Bitmap bitmap = levelHolder.getLevelBlocks()[i][j];
-                if (bitmap == null) {
+                BlockInfo blockInfo = levelHolder.getLevelBlocks()[i][j];
+                if (blockInfo == null) {
                     continue;
                 }
                 drawMatrix.reset();
                 drawMatrix.postTranslate(i * levelHolder.getBlockSize(), j * levelHolder.getBlockSize());
                 drawMatrix.postScale(scale, scale);
-                canvas.drawBitmap(bitmap, drawMatrix, bitmapPaint);
+                canvas.drawBitmap(blockInfo.getBitmap(), drawMatrix, bitmapPaint);
             }
         }
     }
@@ -88,7 +94,7 @@ public class LevelEditorView extends View {
             int x = (int) (touchX / scale / levelHolder.getBlockSize());
             int y = (int) (touchY / scale / levelHolder.getBlockSize());
             try {
-                levelHolder.getLevelBlocks()[x][y] = levelHolder.getBitmapList().get((int) (Math.random() * levelHolder.getBitmapList().size()));
+                levelHolder.getLevelBlocks()[x][y] = levelHolder.getBlockList().get((int) (Math.random() * levelHolder.getBlockList().size()));
             } catch (Exception ignore) {
             }
             invalidate();

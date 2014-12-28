@@ -1,7 +1,6 @@
 package sauer.thatgameimade;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -15,13 +14,16 @@ public class SpriteSelectorView extends ScrollView {
     @SuppressWarnings("unused")
     public static final String TAG = SpriteSelectorView.class.getSimpleName();
 
-    public ArrayList<SpriteInfo> SPRITES;
+    public ArrayList<BlockInfo> SPRITES;
     private OnSpriteSelectedListener onSpriteSelectedListener;
     private LevelHolder levelHolder;
     private SpriteRecyclerViewAdapter spriteRecyclerViewAdapter;
 
     public SpriteSelectorView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        if (isInEditMode()) {
+            return;
+        }
         init(context);
     }
 
@@ -35,8 +37,8 @@ public class SpriteSelectorView extends ScrollView {
 
         spriteRecyclerViewAdapter = new SpriteRecyclerViewAdapter(new SpriteRecyclerViewAdapter.OnItemSelectedListener() {
             @Override
-            public void itemSelected(Bitmap bitmap) {
-                onSpriteSelectedListener.spriteSelected(bitmap);
+            public void itemSelected(BlockInfo blockInfo) {
+                onSpriteSelectedListener.spriteSelected(blockInfo);
             }
         });
         spriteSelectorRecyclerView.setAdapter(spriteRecyclerViewAdapter);
@@ -52,6 +54,6 @@ public class SpriteSelectorView extends ScrollView {
     }
 
     public interface OnSpriteSelectedListener {
-        void spriteSelected(Bitmap bitmap);
+        void spriteSelected(BlockInfo blockInfo);
     }
 }

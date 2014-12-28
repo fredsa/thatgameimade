@@ -1,8 +1,6 @@
 package sauer.thatgameimade;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -24,7 +22,7 @@ public class MainActivity extends Activity {
             return false;
         }
 
-        loadBitmap();
+        loadBlockInfo();
         return true;
     }
 
@@ -39,9 +37,9 @@ public class MainActivity extends Activity {
         levelEditorView.setLevelHolder(levelHolder);
 
         spriteEditorView = (SpriteEditorView) findViewById(R.id.pixelGridView);
-        spriteEditorView.setOnBitmapChangedListener(new SpriteEditorView.OnBitmapChangedListener() {
+        spriteEditorView.setOnBlockInfoChangedListener(new SpriteEditorView.OnBlockInfoChangedListener() {
             @Override
-            public void bitMapChanged(View view, Bitmap bitmap) {
+            public void blockInfoChanged(View view, BlockInfo blockInfo) {
                 invalidateBitmapViews();
             }
         });
@@ -58,12 +56,12 @@ public class MainActivity extends Activity {
         spriteSelectorView.setLevelHolder(levelHolder);
         spriteSelectorView.setOnSpriteSelectedListener(new SpriteSelectorView.OnSpriteSelectedListener() {
             @Override
-            public void spriteSelected(Bitmap bitmap) {
-                setBitmap(bitmap);
+            public void spriteSelected(BlockInfo blockInfo) {
+                setBlockInfo(blockInfo);
             }
         });
 
-        loadBitmap();
+        loadBlockInfo();
     }
 
     private void invalidateBitmapViews() {
@@ -71,13 +69,12 @@ public class MainActivity extends Activity {
         levelEditorView.invalidate();
     }
 
-    private void loadBitmap() {
-        Bitmap spriteBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.my_face).copy(Bitmap.Config.ARGB_8888, true);
-        setBitmap(spriteBitmap);
+    private void loadBlockInfo() {
+        setBlockInfo(levelHolder.getBlockList().get(0));
     }
 
-    private void setBitmap(Bitmap spriteBitmap) {
-        spriteEditorView.setSpriteBitmap(spriteBitmap);
+    private void setBlockInfo(BlockInfo blockInfo) {
+        spriteEditorView.setBlockInfo(blockInfo);
         invalidateBitmapViews();
     }
 

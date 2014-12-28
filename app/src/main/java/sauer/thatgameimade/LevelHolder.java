@@ -14,8 +14,8 @@ public class LevelHolder {
     private static final String TAG = LevelHolder.class.getSimpleName();
     private final int blockSize;
     private final AssetManager assetManager;
-    private ArrayList<Bitmap> bitmapList;
-    private Bitmap[][] levelBlocks;
+    private ArrayList<BlockInfo> blockList;
+    private BlockInfo[][] levelBlocks;
     private Bitmap backgroundBitmap;
     private int levelBlocksX;
     private int levelBlocksY;
@@ -29,7 +29,7 @@ public class LevelHolder {
         levelBlocksX = (int) Math.floor(backgroundBitmap.getWidth() / blockSize);
         levelBlocksY = (int) Math.floor(backgroundBitmap.getHeight() / blockSize);
 
-        bitmapList = makeBitmapAssets(assetDirectory);
+        blockList = makeBlockList(assetDirectory);
 
         levelBlocks = makeLevelBlocks();
     }
@@ -42,8 +42,8 @@ public class LevelHolder {
         }
     }
 
-    private ArrayList<Bitmap> makeBitmapAssets(String assetDirectory) {
-        ArrayList<Bitmap> bitmapList = new ArrayList<>();
+    private ArrayList<BlockInfo> makeBlockList(String assetDirectory) {
+        ArrayList<BlockInfo> bitmapList = new ArrayList<>();
         String[] assets = getAssets(assetDirectory);
         for (String fileName : assets) {
             if (!fileName.endsWith(".png")) {
@@ -56,7 +56,7 @@ public class LevelHolder {
                 Log.w(TAG, fileName + " " + bitmap.getWidth() + " x " + bitmap.getHeight());
                 continue;
             }
-            bitmapList.add(bitmap);
+            bitmapList.add(new BlockInfo(fileName, bitmap));
         }
         return bitmapList;
     }
@@ -69,22 +69,22 @@ public class LevelHolder {
         }
     }
 
-    private Bitmap[][] makeLevelBlocks() {
-        Bitmap[][] blocks = new Bitmap[levelBlocksX][levelBlocksY];
+    private BlockInfo[][] makeLevelBlocks() {
+        BlockInfo[][] blocks = new BlockInfo[levelBlocksX][levelBlocksY];
         for (int i = 0; i < levelBlocksX; i++) {
             for (int j = 0; j < levelBlocksY; j++) {
-                int index = (i + j * levelBlocksX) % bitmapList.size();
-                blocks[i][j] = bitmapList.get(index);
+                int index = (i + j * levelBlocksX) % blockList.size();
+                blocks[i][j] = blockList.get(index);
             }
         }
         return blocks;
     }
 
-    public ArrayList<Bitmap> getBitmapList() {
-        return bitmapList;
+    public ArrayList<BlockInfo> getBlockList() {
+        return blockList;
     }
 
-    public Bitmap[][] getLevelBlocks() {
+    public BlockInfo[][] getLevelBlocks() {
         return levelBlocks;
     }
 

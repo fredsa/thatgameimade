@@ -2,11 +2,11 @@ package sauer.thatgameimade;
 
 import android.graphics.Bitmap;
 
-public class SpriteInfo {
+public class BlockInfo {
     private String name;
     private Bitmap bitmap;
 
-    SpriteInfo(String name, Bitmap bitmap) {
+    BlockInfo(String name, Bitmap bitmap) {
         this.name = name;
         this.bitmap = bitmap;
     }

@@ -21,9 +21,9 @@ public class SpriteEditorView extends View {
 
     private Paint backgroundPaint;
     private Paint spritePaint;
-    private Bitmap spriteBitmap;
+    private BlockInfo blockInfo;
     private float scale;
-    private OnBitmapChangedListener onBitmapChangedListener;
+    private OnBlockInfoChangedListener onBlockInfoChangedListener;
     private int canvasWidth;
     private int canvasHeight;
     private Matrix drawMatrix = new Matrix();
@@ -61,27 +61,27 @@ public class SpriteEditorView extends View {
         canvasHeight = height;
         shortSide = Math.min(canvasWidth, canvasHeight);
 
-        if (spriteBitmap == null) {
+        if (blockInfo == null) {
             return;
         }
         recalculateScale();
     }
 
     private void recalculateScale() {
-        scale = Math.min((float) canvasWidth / spriteBitmap.getWidth(),
-                (float) canvasHeight / spriteBitmap.getHeight());
+        scale = Math.min((float) canvasWidth / blockInfo.getBitmap().getWidth(),
+                (float) canvasHeight / blockInfo.getBitmap().getHeight());
         drawMatrix.reset();
         drawMatrix.postScale(scale, scale);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (spriteBitmap == null) {
+        if (blockInfo == null) {
             return;
         }
 
-        canvas.drawRect(0, 0, shortSide, shortSide, backgroundPaint);
-        canvas.drawBitmap(spriteBitmap, drawMatrix, spritePaint);
+        canvas.drawRect(0, 0, blockInfo.getBitmap().getWidth() * scale, blockInfo.getBitmap().getHeight() * scale, backgroundPaint);
+        canvas.drawBitmap(blockInfo.getBitmap(), drawMatrix, spritePaint);
     }
 
     @Override
@@ -99,8 +99,8 @@ public class SpriteEditorView extends View {
         }
         drawTo(event.getX(), event.getY());
 
-        if (onBitmapChangedListener != null) {
-            onBitmapChangedListener.bitMapChanged(this, spriteBitmap);
+        if (onBlockInfoChangedListener != null) {
+            onBlockInfoChangedListener.blockInfoChanged(this, blockInfo);
         }
 
         return true;
@@ -115,9 +115,9 @@ public class SpriteEditorView extends View {
         lastY = newY;
     }
 
-    public void setSpriteBitmap(Bitmap spriteBitmap) {
-        this.spriteBitmap = spriteBitmap;
-        canvas = new Canvas(spriteBitmap);
+    public void setBlockInfo(BlockInfo blockInfo) {
+        this.blockInfo = blockInfo;
+        canvas = new Canvas(blockInfo.getBitmap());
         recalculateScale();
     }
 
@@ -125,11 +125,11 @@ public class SpriteEditorView extends View {
         this.brushPaint = brushPaint;
     }
 
-    public void setOnBitmapChangedListener(OnBitmapChangedListener onBitmapChangedListener) {
-        this.onBitmapChangedListener = onBitmapChangedListener;
+    public void setOnBlockInfoChangedListener(OnBlockInfoChangedListener onBlockInfoChangedListener) {
+        this.onBlockInfoChangedListener = onBlockInfoChangedListener;
     }
 
-    public interface OnBitmapChangedListener {
-        void bitMapChanged(View view, Bitmap bitmap);
+    public interface OnBlockInfoChangedListener {
+        void blockInfoChanged(View view, BlockInfo blockInfo);
     }
 }

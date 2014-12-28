@@ -1,6 +1,5 @@
 package sauer.thatgameimade;
 
-import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,13 +28,13 @@ public class SpriteRecyclerViewAdapter extends RecyclerView.Adapter<SpriteRecycl
 
     @Override
     public void onBindViewHolder(SpriteViewHolder spriteViewHolder, int position) {
-        final Bitmap bitmap = levelHolder.getBitmapList().get(position);
-        spriteViewHolder.spriteNameTextView.setText("foo");
-        spriteViewHolder.spriteImageView.setImageBitmap(bitmap);
+        final BlockInfo blockInfo = levelHolder.getBlockList().get(position);
+        spriteViewHolder.spriteNameTextView.setText(blockInfo.getName());
+        spriteViewHolder.spriteImageView.setImageBitmap(blockInfo.getBitmap());
         spriteViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemSelectedListener.itemSelected(bitmap);
+                onItemSelectedListener.itemSelected(blockInfo);
             }
         });
     }
@@ -43,7 +42,7 @@ public class SpriteRecyclerViewAdapter extends RecyclerView.Adapter<SpriteRecycl
     @Override
     public int getItemCount() {
         // TODO avoid conditional
-        return levelHolder == null ? 0 : levelHolder.getBitmapList().size();
+        return levelHolder == null ? 0 : levelHolder.getBlockList().size();
     }
 
     public void setLevelHolder(LevelHolder levelHolder) {
@@ -51,7 +50,7 @@ public class SpriteRecyclerViewAdapter extends RecyclerView.Adapter<SpriteRecycl
     }
 
     public interface OnItemSelectedListener {
-        void itemSelected(Bitmap bitmap);
+        void itemSelected(BlockInfo blockInfo);
     }
 
     public static class SpriteViewHolder extends RecyclerView.ViewHolder {
