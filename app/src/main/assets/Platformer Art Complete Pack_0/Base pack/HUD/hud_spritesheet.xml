@@ -1,0 +1,35 @@
+<TextureAtlas imagePath="sheet.png">
+    <SubTexture name="hud_0.png" height="38" width="30" x="230" y="0" />
+    <SubTexture name="hud_1.png" height="37" width="26" x="196" y="41" />
+    <SubTexture name="hud_2.png" height="38" width="32" x="55" y="98" />
+    <SubTexture name="hud_3.png" height="38" width="28" x="239" y="80" />
+    <SubTexture name="hud_4.png" height="38" width="29" x="238" y="122" />
+    <SubTexture name="hud_5.png" height="38" width="28" x="238" y="162" />
+    <SubTexture name="hud_6.png" height="38" width="30" x="230" y="40" />
+    <SubTexture name="hud_7.png" height="39" width="32" x="226" y="206" />
+    <SubTexture name="hud_8.png" height="40" width="32" x="192" y="206" />
+    <SubTexture name="hud_9.png" height="39" width="32" x="196" y="0" />
+    <SubTexture name="hud_coins.png" height="47" width="47" x="55" y="0" />
+    <SubTexture name="hud_gem_blue.png" height="36" width="46" x="104" y="0" />
+    <SubTexture name="hud_gem_green.png" height="36" width="46" x="98" y="185" />
+    <SubTexture name="hud_gem_red.png" height="36" width="46" x="98" y="147" />
+    <SubTexture name="hud_gem_yellow.png" height="36" width="46" x="98" y="223" />
+    <SubTexture name="hud_heartEmpty.png" height="45" width="53" x="0" y="47" />
+    <SubTexture name="hud_heartFull.png" height="45" width="53" x="0" y="94" />
+    <SubTexture name="hud_heartHalf.png" height="45" width="53" x="0" y="0" />
+    <SubTexture name="hud_keyBlue.png" height="40" width="44" x="146" y="147" />
+    <SubTexture name="hud_keyBlue_disabled.png" height="40" width="44" x="150" y="38" />
+    <SubTexture name="hud_keyGreem_disabled.png" height="40" width="44" x="104" y="38" />
+    <SubTexture name="hud_keyGreen.png" height="40" width="44" x="192" y="122" />
+    <SubTexture name="hud_keyRed.png" height="40" width="44" x="193" y="80" />
+    <SubTexture name="hud_keyRed_disabled.png" height="40" width="44" x="192" y="164" />
+    <SubTexture name="hud_keyYellow.png" height="40" width="44" x="146" y="189" />
+    <SubTexture name="hud_keyYellow_disabled.png" height="40" width="44" x="147" y="80" />
+    <SubTexture name="hud_p1.png" height="47" width="47" x="55" y="49" />
+    <SubTexture name="hud_p1Alt.png" height="47" width="47" x="0" y="141" />
+    <SubTexture name="hud_p2.png" height="47" width="47" x="49" y="141" />
+    <SubTexture name="hud_p2Alt.png" height="47" width="47" x="0" y="190" />
+    <SubTexture name="hud_p3.png" height="47" width="47" x="49" y="190" />
+    <SubTexture name="hud_p3Alt.png" height="47" width="47" x="98" y="98" />
+    <SubTexture name="hud_x.png" height="28" width="30" x="0" y="239" />
+</TextureAtlas>

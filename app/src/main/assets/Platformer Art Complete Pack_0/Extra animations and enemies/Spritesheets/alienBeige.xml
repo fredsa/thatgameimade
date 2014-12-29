@@ -1,0 +1,13 @@
+<TextureAtlas imagePath="sheet.png">
+    <SubTexture name="alienBeige.png" height="92" width="66" x="70" y="95" />
+    <SubTexture name="alienBeige_climb1.png" height="95" width="66" x="70" y="0" />
+    <SubTexture name="alienBeige_climb2.png" height="95" width="66" x="134" y="289" />
+    <SubTexture name="alienBeige_duck.png" height="72" width="67" x="67" y="387" />
+    <SubTexture name="alienBeige_hurt.png" height="92" width="67" x="0" y="387" />
+    <SubTexture name="alienBeige_jump.png" height="93" width="66" x="69" y="196" />
+    <SubTexture name="alienBeige_stand.png" height="92" width="66" x="68" y="294" />
+    <SubTexture name="alienBeige_swim1.png" height="98" width="69" x="0" y="196" />
+    <SubTexture name="alienBeige_swim2.png" height="100" width="70" x="0" y="0" />
+    <SubTexture name="alienBeige_walk1.png" height="93" width="68" x="0" y="294" />
+    <SubTexture name="alienBeige_walk2.png" height="96" width="70" x="0" y="100" />
+</TextureAtlas>
