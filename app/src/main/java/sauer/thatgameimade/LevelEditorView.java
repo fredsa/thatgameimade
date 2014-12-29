@@ -58,11 +58,7 @@ public class LevelEditorView extends View {
         }
 
         canvas.drawRect(0, 0, levelHolder.getBackgroundBitmap().getWidth() * scale, levelHolder.getBackgroundBitmap().getHeight() * scale, backgroundPaint);
-
-        // TODO avoid conditional
-        if (levelHolder != null) {
-            paintBitmaps(canvas);
-        }
+        paintBitmaps(canvas);
     }
 
     private void paintBitmaps(Canvas canvas) {

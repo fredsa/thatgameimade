@@ -39,8 +39,7 @@ public class SpriteRecyclerViewAdapter extends RecyclerView.Adapter<SpriteRecycl
 
     @Override
     public int getItemCount() {
-        // TODO avoid conditional
-        return levelHolder == null ? 0 : levelHolder.getBlockList().size();
+        return levelHolder.getBlockList().size();
     }
 
     public void setLevelHolder(LevelHolder levelHolder) {
