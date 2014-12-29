@@ -38,7 +38,7 @@ public class LevelHolder {
         this.levelBlocks = levelBlocks;
     }
 
-    public static LevelHolder load(Context context) {
+    public static LevelHolder load(Context context) throws IOException {
         int blockSize = context.getResources().getInteger(R.integer.block_size);
         try {
             Log.w(TAG, "LOADING LEVEL FROM " + FILENAME);
@@ -69,41 +69,24 @@ public class LevelHolder {
         return levelHolder;
     }
 
-    private static Bitmap getBitmap(AssetManager assetManager, String assetFilename) {
-        try {
+    private static Bitmap getBitmap(AssetManager assetManager, String assetFilename) throws IOException {
             return BitmapFactory.decodeStream(assetManager.open(assetFilename));
-        } catch (IOException ignore) {
-            throw new RuntimeException("Unable to load game asset file '" + assetFilename + "'");
-        }
     }
 
-    private static ArrayList<BlockInfo> makeBlockList(AssetManager assetManager, String assetDirectory) {
+    private static ArrayList<BlockInfo> makeBlockList(AssetManager assetManager, String assetDirectory) throws IOException {
         ArrayList<BlockInfo> blockList = new ArrayList<>();
-        ArrayList<String> assets = getAssets(assetManager, assetDirectory);
-        for (String path : assets) {
-            Bitmap bitmap = getBitmap(assetManager, path);
-            bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-            blockList.add(new BlockInfo(path, bitmap));
+        String[] items = assetManager.list(assetDirectory);
+        for (String item : items) {
+            String path = assetDirectory + "/" + item;
+            try {
+                Bitmap bitmap = getBitmap(assetManager, path);
+                bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+                blockList.add(new BlockInfo(path, bitmap));
+            } catch (Exception ignore) {
+                blockList.addAll(makeBlockList(assetManager, path));
+            }
         }
         return blockList;
-    }
-
-    private static ArrayList<String> getAssets(AssetManager assetManager, String assetDirectory) {
-        ArrayList<String> list = new ArrayList<>();
-        try {
-            String[] items = assetManager.list(assetDirectory);
-            for (String item : items) {
-                String path = assetDirectory + "/" + item;
-                if (path.endsWith(".png")) {
-                    list.add(path);
-                } else {
-                    list.addAll(getAssets(assetManager, path));
-                }
-            }
-            return list;
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to access asset directory '" + assetDirectory + "'");
-        }
     }
 
     private static int[][] makeLevelBlocks(ArrayList<BlockInfo> blockList, int levelBlocksX, int levelBlocksY) {

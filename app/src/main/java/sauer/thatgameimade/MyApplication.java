@@ -3,6 +3,7 @@ package sauer.thatgameimade;
 import android.app.Application;
 import android.util.Log;
 
+import java.io.IOException;
 import java.util.Date;
 
 public class MyApplication extends Application {
@@ -15,7 +16,11 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Log.w(TAG, "=========================== " + new Date());
-        level1 = LevelHolder.load(getApplicationContext());
+        try {
+            level1 = LevelHolder.load(getApplicationContext());
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to load level data", e);
+        }
     }
 
     public LevelHolder getLevelHolder() {
