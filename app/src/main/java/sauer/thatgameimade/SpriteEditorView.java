@@ -58,6 +58,9 @@ public class SpriteEditorView extends View {
 
     @Override
     protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+        if (isInEditMode()) {
+            return;
+        }
         canvasWidth = width;
         canvasHeight = height;
         recalculateScale();
@@ -72,6 +75,9 @@ public class SpriteEditorView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        if (isInEditMode()) {
+            return;
+        }
         canvas.drawRect(0, 0, bitmap.getWidth() * scale, bitmap.getHeight() * scale, backgroundPaint);
         canvas.drawBitmap(bitmap, drawMatrix, spritePaint);
     }
