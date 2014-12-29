@@ -15,7 +15,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Log.w(TAG, "=========================== " + new Date());
-        level1 = new LevelHolder(getResources(), "platformerArt_v4/png", "Platformer Art Complete Pack_0/Mushroom expansion/Backgrounds/bg_castle.png");
+        level1 = new LevelHolder(getApplicationContext(), "platformerArt_v4/png", "Platformer Art Complete Pack_0/Mushroom expansion/Backgrounds/bg_castle.png");
     }
 
     public LevelHolder getLevelHolder() {

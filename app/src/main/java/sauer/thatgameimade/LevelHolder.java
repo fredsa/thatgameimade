@@ -1,5 +1,6 @@
 package sauer.thatgameimade;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -16,13 +17,16 @@ public class LevelHolder {
 
     private final int blockSize;
     private final AssetManager assetManager;
+    private final Context context;
     private ArrayList<BlockInfo> blockList;
     private int[][] levelBlocks;
     private Bitmap backgroundBitmap;
     private int levelBlocksX;
     private int levelBlocksY;
 
-    public LevelHolder(Resources resources, String assetDirectory, String backgroundFilename) {
+    public LevelHolder(Context context, String assetDirectory, String backgroundFilename) {
+        this.context = context;
+        Resources resources = context.getResources();
         assetManager = resources.getAssets();
         blockSize = resources.getInteger(R.integer.block_size);
 
