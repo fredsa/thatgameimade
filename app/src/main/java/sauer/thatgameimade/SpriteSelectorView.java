@@ -7,16 +7,12 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ScrollView;
 
-import java.util.ArrayList;
-
 public class SpriteSelectorView extends ScrollView {
 
     @SuppressWarnings("unused")
     public static final String TAG = SpriteSelectorView.class.getSimpleName();
 
-    public ArrayList<BlockInfo> SPRITES;
     private OnSpriteSelectedListener onSpriteSelectedListener;
-    private LevelHolder levelHolder;
     private SpriteRecyclerViewAdapter spriteRecyclerViewAdapter;
 
     public SpriteSelectorView(Context context, AttributeSet attrs) {
@@ -37,8 +33,8 @@ public class SpriteSelectorView extends ScrollView {
 
         spriteRecyclerViewAdapter = new SpriteRecyclerViewAdapter(new SpriteRecyclerViewAdapter.OnItemSelectedListener() {
             @Override
-            public void itemSelected(BlockInfo blockInfo) {
-                onSpriteSelectedListener.spriteSelected(blockInfo);
+            public void itemSelected(int blockIndex) {
+                onSpriteSelectedListener.spriteSelected(blockIndex);
             }
         });
         spriteSelectorRecyclerView.setAdapter(spriteRecyclerViewAdapter);
@@ -49,11 +45,10 @@ public class SpriteSelectorView extends ScrollView {
     }
 
     public void setLevelHolder(LevelHolder levelHolder) {
-        this.levelHolder = levelHolder;
         spriteRecyclerViewAdapter.setLevelHolder(levelHolder);
     }
 
     public interface OnSpriteSelectedListener {
-        void spriteSelected(BlockInfo blockInfo);
+        void spriteSelected(int blockIndex);
     }
 }

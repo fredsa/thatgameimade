@@ -11,11 +11,13 @@ import java.util.ArrayList;
 
 public class LevelHolder {
 
+    @SuppressWarnings("unused")
     private static final String TAG = LevelHolder.class.getSimpleName();
+
     private final int blockSize;
     private final AssetManager assetManager;
     private ArrayList<BlockInfo> blockList;
-    private BlockInfo[][] levelBlocks;
+    private int[][] levelBlocks;
     private Bitmap backgroundBitmap;
     private int levelBlocksX;
     private int levelBlocksY;
@@ -43,7 +45,7 @@ public class LevelHolder {
     }
 
     private ArrayList<BlockInfo> makeBlockList(String assetDirectory) {
-        ArrayList<BlockInfo> bitmapList = new ArrayList<>();
+        ArrayList<BlockInfo> blockList = new ArrayList<>();
         String[] assets = getAssets(assetDirectory);
         for (String fileName : assets) {
             if (!fileName.endsWith(".png")) {
@@ -56,9 +58,9 @@ public class LevelHolder {
                 Log.w(TAG, fileName + " " + bitmap.getWidth() + " x " + bitmap.getHeight());
                 continue;
             }
-            bitmapList.add(new BlockInfo(fileName, bitmap));
+            blockList.add(new BlockInfo(fileName, bitmap));
         }
-        return bitmapList;
+        return blockList;
     }
 
     private String[] getAssets(String assetDirectory) {
@@ -69,12 +71,12 @@ public class LevelHolder {
         }
     }
 
-    private BlockInfo[][] makeLevelBlocks() {
-        BlockInfo[][] blocks = new BlockInfo[levelBlocksX][levelBlocksY];
+    private int[][] makeLevelBlocks() {
+        int[][] blocks = new int[levelBlocksX][levelBlocksY];
         for (int i = 0; i < levelBlocksX; i++) {
             for (int j = 0; j < levelBlocksY; j++) {
                 int index = (i + j * levelBlocksX) % blockList.size();
-                blocks[i][j] = blockList.get(index);
+                blocks[i][j] = index;
             }
         }
         return blocks;
@@ -84,7 +86,7 @@ public class LevelHolder {
         return blockList;
     }
 
-    public BlockInfo[][] getLevelBlocks() {
+    public int[][] getLevelBlocks() {
         return levelBlocks;
     }
 

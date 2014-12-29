@@ -37,9 +37,10 @@ public class MainActivity extends Activity {
         levelEditorView.setLevelHolder(levelHolder);
 
         spriteEditorView = (SpriteEditorView) findViewById(R.id.pixelGridView);
+        spriteEditorView.setLevelHolder(levelHolder);
         spriteEditorView.setOnBlockInfoChangedListener(new SpriteEditorView.OnBlockInfoChangedListener() {
             @Override
-            public void blockInfoChanged(View view, BlockInfo blockInfo) {
+            public void blockInfoChanged(View view, int blockInfo) {
                 invalidateBitmapViews();
             }
         });
@@ -56,8 +57,8 @@ public class MainActivity extends Activity {
         spriteSelectorView.setLevelHolder(levelHolder);
         spriteSelectorView.setOnSpriteSelectedListener(new SpriteSelectorView.OnSpriteSelectedListener() {
             @Override
-            public void spriteSelected(BlockInfo blockInfo) {
-                setBlockInfo(blockInfo);
+            public void spriteSelected(int blockIndex) {
+                setBlockIndex(blockIndex);
             }
         });
 
@@ -70,12 +71,12 @@ public class MainActivity extends Activity {
     }
 
     private void loadBlockInfo() {
-        setBlockInfo(levelHolder.getBlockList().get(0));
+        setBlockIndex(0);
     }
 
-    private void setBlockInfo(BlockInfo blockInfo) {
-        spriteEditorView.setBlockInfo(blockInfo);
-        levelEditorView.setBlockInfo(blockInfo);
+    private void setBlockIndex(int blockIndex) {
+        spriteEditorView.setBlockIndex(blockIndex);
+        levelEditorView.setBlockIndex(blockIndex);
         invalidateBitmapViews();
     }
 

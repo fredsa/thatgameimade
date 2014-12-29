@@ -30,7 +30,7 @@ public class LevelEditorView extends View {
 
     private LevelHolder levelHolder;
     private float scale = 1.4f;
-    private BlockInfo blockInfo;
+    private int blockIndex;
 
     public LevelEditorView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -75,14 +75,11 @@ public class LevelEditorView extends View {
     private void paintBitmaps(Canvas canvas) {
         for (int i = 0; i < levelHolder.getLevelBlocksX(); i++) {
             for (int j = 0; j < levelHolder.getLevelBlocksY(); j++) {
-                BlockInfo blockInfo = levelHolder.getLevelBlocks()[i][j];
-                if (blockInfo == null) {
-                    continue;
-                }
+                int blockIndex = levelHolder.getLevelBlocks()[i][j];
                 drawMatrix.reset();
                 drawMatrix.postTranslate(i * levelHolder.getBlockSize(), j * levelHolder.getBlockSize());
                 drawMatrix.postScale(scale, scale);
-                canvas.drawBitmap(blockInfo.getBitmap(), drawMatrix, bitmapPaint);
+                canvas.drawBitmap(levelHolder.getBlockList().get(blockIndex).getBitmap(), drawMatrix, bitmapPaint);
             }
         }
     }
@@ -95,7 +92,7 @@ public class LevelEditorView extends View {
             int x = (int) (touchX / scale / levelHolder.getBlockSize());
             int y = (int) (touchY / scale / levelHolder.getBlockSize());
             try {
-                levelHolder.getLevelBlocks()[x][y] = blockInfo;
+                levelHolder.getLevelBlocks()[x][y] = blockIndex;
             } catch (IndexOutOfBoundsException ignore) {
             }
             invalidate();
@@ -109,7 +106,7 @@ public class LevelEditorView extends View {
         init();
     }
 
-    public void setBlockInfo(BlockInfo blockInfo) {
-        this.blockInfo = blockInfo;
+    public void setBlockIndex(int blockIndex) {
+        this.blockIndex = blockIndex;
     }
 }

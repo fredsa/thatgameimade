@@ -21,17 +21,18 @@ public class SpriteEditorView extends View {
 
     private Paint backgroundPaint;
     private Paint spritePaint;
-    private BlockInfo blockInfo;
+    private int blockIndex;
     private float scale;
     private OnBlockInfoChangedListener onBlockInfoChangedListener;
     private int canvasWidth;
     private int canvasHeight;
     private Matrix drawMatrix = new Matrix();
     private Paint brushPaint;
-    private int shortSide;
     private Canvas canvas;
     private float lastX;
     private float lastY;
+    private LevelHolder levelHolder;
+    private Bitmap bitmap;
 
     public SpriteEditorView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -59,29 +60,20 @@ public class SpriteEditorView extends View {
     protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
         canvasWidth = width;
         canvasHeight = height;
-        shortSide = Math.min(canvasWidth, canvasHeight);
-
-        if (blockInfo == null) {
-            return;
-        }
         recalculateScale();
     }
 
     private void recalculateScale() {
-        scale = Math.min((float) canvasWidth / blockInfo.getBitmap().getWidth(),
-                (float) canvasHeight / blockInfo.getBitmap().getHeight());
+        scale = Math.min((float) canvasWidth / bitmap.getWidth(),
+                (float) canvasHeight / bitmap.getHeight());
         drawMatrix.reset();
         drawMatrix.postScale(scale, scale);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (blockInfo == null) {
-            return;
-        }
-
-        canvas.drawRect(0, 0, blockInfo.getBitmap().getWidth() * scale, blockInfo.getBitmap().getHeight() * scale, backgroundPaint);
-        canvas.drawBitmap(blockInfo.getBitmap(), drawMatrix, spritePaint);
+        canvas.drawRect(0, 0, bitmap.getWidth() * scale, bitmap.getHeight() * scale, backgroundPaint);
+        canvas.drawBitmap(bitmap, drawMatrix, spritePaint);
     }
 
     @Override
@@ -100,7 +92,7 @@ public class SpriteEditorView extends View {
         drawTo(event.getX(), event.getY());
 
         if (onBlockInfoChangedListener != null) {
-            onBlockInfoChangedListener.blockInfoChanged(this, blockInfo);
+            onBlockInfoChangedListener.blockInfoChanged(this, blockIndex);
         }
 
         return true;
@@ -115,9 +107,10 @@ public class SpriteEditorView extends View {
         lastY = newY;
     }
 
-    public void setBlockInfo(BlockInfo blockInfo) {
-        this.blockInfo = blockInfo;
-        canvas = new Canvas(blockInfo.getBitmap());
+    public void setBlockIndex(int blockIndex) {
+        this.blockIndex = blockIndex;
+        bitmap = levelHolder.getBlockList().get(blockIndex).getBitmap();
+        canvas = new Canvas(bitmap);
         recalculateScale();
     }
 
@@ -129,7 +122,11 @@ public class SpriteEditorView extends View {
         this.onBlockInfoChangedListener = onBlockInfoChangedListener;
     }
 
+    public void setLevelHolder(LevelHolder levelHolder) {
+        this.levelHolder = levelHolder;
+    }
+
     public interface OnBlockInfoChangedListener {
-        void blockInfoChanged(View view, BlockInfo blockInfo);
+        void blockInfoChanged(View view, int blockInfo);
     }
 }

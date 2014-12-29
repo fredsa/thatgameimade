@@ -14,7 +14,6 @@ public class SpriteRecyclerViewAdapter extends RecyclerView.Adapter<SpriteRecycl
     private LevelHolder levelHolder;
 
     SpriteRecyclerViewAdapter(OnItemSelectedListener onItemSelectedListener) {
-        this.levelHolder = levelHolder;
         this.onItemSelectedListener = onItemSelectedListener;
     }
 
@@ -22,19 +21,18 @@ public class SpriteRecyclerViewAdapter extends RecyclerView.Adapter<SpriteRecycl
     public SpriteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.sprite_list_item, parent, false);
-        SpriteViewHolder spriteViewHolder = new SpriteViewHolder(itemView);
-        return spriteViewHolder;
+        return new SpriteViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(SpriteViewHolder spriteViewHolder, int position) {
+    public void onBindViewHolder(SpriteViewHolder spriteViewHolder, final int position) {
         final BlockInfo blockInfo = levelHolder.getBlockList().get(position);
         spriteViewHolder.spriteNameTextView.setText(blockInfo.getName());
         spriteViewHolder.spriteImageView.setImageBitmap(blockInfo.getBitmap());
         spriteViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemSelectedListener.itemSelected(blockInfo);
+                onItemSelectedListener.itemSelected(position);
             }
         });
     }
@@ -50,7 +48,7 @@ public class SpriteRecyclerViewAdapter extends RecyclerView.Adapter<SpriteRecycl
     }
 
     public interface OnItemSelectedListener {
-        void itemSelected(BlockInfo blockInfo);
+        void itemSelected(int blockIndex);
     }
 
     public static class SpriteViewHolder extends RecyclerView.ViewHolder {
