@@ -15,6 +15,8 @@ public class MainActivity extends Activity {
     private SpriteEditorView spriteEditorView;
     private ColorPickerView colorPickerView;
     private LevelHolder levelHolder;
+    private MyApplication myApplication;
+    private SpriteSelectorView spriteSelectorView;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -30,14 +32,11 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        MyApplication myApplication = (MyApplication) getApplication();
-        levelHolder = myApplication.getLevelHolder();
+        myApplication = (MyApplication) getApplication();
 
         levelEditorView = (LevelEditorView) findViewById(R.id.myView);
-        levelEditorView.setLevelHolder(levelHolder);
 
         spriteEditorView = (SpriteEditorView) findViewById(R.id.pixelGridView);
-        spriteEditorView.setLevelHolder(levelHolder);
         spriteEditorView.setOnBlockInfoChangedListener(new SpriteEditorView.OnBlockInfoChangedListener() {
             @Override
             public void blockInfoChanged(View view, int blockInfo) {
@@ -53,16 +52,13 @@ public class MainActivity extends Activity {
             }
         });
 
-        SpriteSelectorView spriteSelectorView = (SpriteSelectorView) findViewById(R.id.spriteSelectorView);
-        spriteSelectorView.setLevelHolder(levelHolder);
+        spriteSelectorView = (SpriteSelectorView) findViewById(R.id.spriteSelectorView);
         spriteSelectorView.setOnSpriteSelectedListener(new SpriteSelectorView.OnSpriteSelectedListener() {
             @Override
             public void spriteSelected(int blockIndex) {
                 setBlockIndex(blockIndex);
             }
         });
-
-        loadBlockInfo();
     }
 
     private void invalidateBitmapViews() {
@@ -84,6 +80,23 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         hideSystemControls();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        levelHolder.save();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        levelHolder = myApplication.getLevelHolder();
+        levelEditorView.setLevelHolder(levelHolder);
+        spriteEditorView.setLevelHolder(levelHolder);
+        spriteSelectorView.setLevelHolder(levelHolder);
+
+        loadBlockInfo();
     }
 
     private void hideSystemControls() {
