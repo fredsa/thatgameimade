@@ -79,22 +79,28 @@ public class LevelHolder {
 
     private static ArrayList<BlockInfo> makeBlockList(AssetManager assetManager, String assetDirectory) {
         ArrayList<BlockInfo> blockList = new ArrayList<>();
-        String[] assets = getAssets(assetManager, assetDirectory);
-        for (String fileName : assets) {
-            if (!fileName.endsWith(".png")) {
-                Log.w(TAG, fileName);
-                continue;
-            }
-            Bitmap bitmap = getBitmap(assetManager, assetDirectory + "/" + fileName);
+        ArrayList<String> assets = getAssets(assetManager, assetDirectory);
+        for (String path : assets) {
+            Bitmap bitmap = getBitmap(assetManager, path);
             bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-            blockList.add(new BlockInfo(fileName, bitmap));
+            blockList.add(new BlockInfo(path, bitmap));
         }
         return blockList;
     }
 
-    private static String[] getAssets(AssetManager assetManager, String assetDirectory) {
+    private static ArrayList<String> getAssets(AssetManager assetManager, String assetDirectory) {
+        ArrayList<String> list = new ArrayList<>();
         try {
-            return assetManager.list(assetDirectory);
+            String[] items = assetManager.list(assetDirectory);
+            for (String item : items) {
+                String path = assetDirectory + "/" + item;
+                if (path.endsWith(".png")) {
+                    list.add(path);
+                } else {
+                    list.addAll(getAssets(assetManager, path));
+                }
+            }
+            return list;
         } catch (IOException e) {
             throw new RuntimeException("Unable to access asset directory '" + assetDirectory + "'");
         }
