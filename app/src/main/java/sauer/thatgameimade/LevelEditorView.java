@@ -3,7 +3,6 @@ package sauer.thatgameimade;
 import android.content.Context;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Shader;
@@ -20,16 +19,12 @@ public class LevelEditorView extends View {
 
     private Paint backgroundPaint;
     private Paint bitmapPaint;
-    private Paint touchPaint;
-
-    private float touchX;
-    private float touchY;
 
     private Matrix backgroundMatrix = new Matrix();
     private Matrix drawMatrix = new Matrix();
 
     private LevelHolder levelHolder;
-    private float scale = 1.4f;
+    private float scale;
     private int blockIndex;
 
     public LevelEditorView(Context context, AttributeSet attrs) {
@@ -43,16 +38,14 @@ public class LevelEditorView extends View {
         backgroundPaint.setShader(backgroundShader);
 
         bitmapPaint = new Paint();
-
-        touchPaint = new Paint();
-        touchPaint.setColor(Color.argb(75, 255, 255, 255));
     }
 
     @Override
-    protected void onSizeChanged(int weight, int height, int oldWidth, int oldHeight) {
+    protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
         if (isInEditMode()) {
             return;
         }
+        scale = Math.min((float) width / levelHolder.getBackgroundBitmap().getWidth(), (float) height / levelHolder.getBackgroundBitmap().getHeight());
         backgroundMatrix.setScale(scale, scale);
         backgroundShader.setLocalMatrix(backgroundMatrix);
     }
@@ -87,10 +80,8 @@ public class LevelEditorView extends View {
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         if (event.getPointerCount() == 1) {
-            this.touchX = event.getX();
-            this.touchY = event.getY();
-            int x = (int) (touchX / scale / levelHolder.getBlockSize());
-            int y = (int) (touchY / scale / levelHolder.getBlockSize());
+            int x = (int) (event.getX() / scale / levelHolder.getBlockSize());
+            int y = (int) (event.getY() / scale / levelHolder.getBlockSize());
             try {
                 levelHolder.getLevelBlocks()[x][y] = blockIndex;
             } catch (IndexOutOfBoundsException ignore) {
