@@ -31,7 +31,7 @@ public class ColorPickerView extends View {
             300f / 360f,
             360f / 360f,
     };
-    private final Paint sliderPaint;
+    private Paint sliderPaint;
     @SuppressWarnings("unused")
     private String TAG = ColorPickerView.class.getSimpleName();
     private float[] hsvFloats = new float[]{0f, 1f, 1f};
@@ -43,7 +43,12 @@ public class ColorPickerView extends View {
     private Paint bgPaint;
     private Paint brushPaint;
 
-    {
+    public ColorPickerView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    void init() {
         bgPaint = new Paint();
         bgPaint.setColor(Color.BLACK);
 
@@ -52,12 +57,8 @@ public class ColorPickerView extends View {
         sliderPaint = new Paint();
 
         brushPaint = new Paint();
-        brushPaint.setColor(Color.WHITE);
+        brushPaint.setColor(Color.RED);
         brushPaint.setStrokeWidth(1f);
-    }
-
-    public ColorPickerView(Context context, AttributeSet attrs) {
-        super(context, attrs);
     }
 
     @Override
