@@ -30,7 +30,7 @@ public class BlockInfo {
         return path;
     }
 
-    public String getBasename() {
+    public String getName() {
         return basename;
     }
 }

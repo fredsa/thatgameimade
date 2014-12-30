@@ -27,7 +27,7 @@ public class SpriteRecyclerViewAdapter extends RecyclerView.Adapter<SpriteRecycl
     @Override
     public void onBindViewHolder(SpriteViewHolder spriteViewHolder, final int position) {
         final BlockInfo blockInfo = levelHolder.getBlockList().get(position);
-        spriteViewHolder.spriteNameTextView.setText(blockInfo.getBasename());
+        spriteViewHolder.spriteNameTextView.setText(blockInfo.getName());
         spriteViewHolder.spriteImageView.setImageBitmap(blockInfo.getBitmap());
         spriteViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
