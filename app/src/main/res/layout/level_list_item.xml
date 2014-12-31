@@ -11,17 +11,11 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/spriteImageView"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/my_cake_half_alt" />
-
         <TextView
-            android:id="@+id/spriteNameTextView"
+            android:id="@+id/levelNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sprite name"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:text="Level name"
+            android:textSize="40sp" />
     </LinearLayout>
 </FrameLayout>

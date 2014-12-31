@@ -4,20 +4,6 @@
     android:keepScreenOn="true"
     android:orientation="horizontal">
 
-    <!--<LinearLayout-->
-    <!--android:layout_weight="1"-->
-    <!--android:layout_width="fill_parent"-->
-    <!--android:layout_height="fill_parent"-->
-    <!--android:orientation="vertical">-->
-
-    <!--&lt;!&ndash;<sauer.thatgameimade.SpriteSelectorView&ndash;&gt;-->
-    <!--&lt;!&ndash;android:id="@+id/spriteSelectorView"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:layout_width="fill_parent"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:layout_height="fill_parent" />&ndash;&gt;-->
-
-    <!--</LinearLayout>-->
-
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
